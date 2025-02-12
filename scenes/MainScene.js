@@ -7,6 +7,7 @@ export default class MainScene extends Phaser.Scene{
         this.isJumping = false //pour savoir si on est en train de sauter
         this.defaultGravityY = 500 //valeur de gravité Y par défaut. Ces 2 variables permettent de revenir a la gravité "normal" après une modification de la gravité
         this.defaultGravityX = 0 //valeur de graité X par défaut
+        this.playerSpeed = 200 //vitesse du joueur. Peut importe le sens
     }
     preload(){  // Fonction où charger nos assets
         this.load.image("player","/assets/black_square.png") //charge notre image de player (un carré noir pour l'instant)
@@ -20,9 +21,11 @@ export default class MainScene extends Phaser.Scene{
 
         this.player.body.setCollideWorldBounds(true); // Empêche de sortir de l'écran 
 
-        this.platform = this.physics.add.staticGroup() //groupe d'objet statique. Plateforme dans notre cas
-        this.platform.create(this.game.config.width/2,this.game.config.height,"assets/black_square.png") //on le place au sol au millieu
-
+        this.platform = this.physics.add.staticGroup({ //groupe d'objet statique. Plateforme dans notre cas
+            key: 'assets/black_square.png',
+            frameQuantity: 100,  // Nombre d'objets créés dans le groupe
+            setXY: { x: 0, y: this.game.config.height, stepX: 20 }  // Position initiale et intervalle entre les objets
+        });
         this.physics.add.collider(this.player,this.platform)
         this.cursors = this.input.keyboard.createCursorKeys()
 
@@ -30,30 +33,23 @@ export default class MainScene extends Phaser.Scene{
     update() {
         let pressed
         if (this.cursors.left.isDown){ //si fleche gauche pressé
-            this.player.setVelocityX(-100) //on met une velocité de 100 sur l'axe X
+            this.player.setVelocityX(-this.playerSpeed) //on met une velocité de 100 sur l'axe X
             pressed=true //on verrouille pour ne pas que le dernier if stop la velocité
         }
         if (this.cursors.right.isDown){ //si fleche droite
-            this.player.setVelocityX(100) //on va vers la droite
-            pressed=true
-        }
-        if(this.cursors.up.isDown){ //fleche du haut
-            this.player.setVelocityY(-100) //ect.
-            pressed=true
-        }
-        if(this.cursors.down.isDown){
-            this.player.setVelocityY(100)
+            this.player.setVelocityX(this.playerSpeed) //on va vers la droite
             pressed=true
         }
         if(this.cursors.space.isDown){
             this.jump()
+        }else if(!pressed){
+            this.player.setVelocityX(0)
         }
     }
     //Je pense que cette fonction est facilement optimisable. Merci de le faire dès que possible
     jump(y=200,speed=400){ //fonction de saut. Y designe la hauteur du saut et Speed la vitesse. Par défaut, les 2 sont à 200
-        if (this.isJumping){ //on verifie si on ne saute pas deja. Si oui, on stop
-            return "Already jumping"
-        }
+        if (this.isJumping || !this.player.body.touching.down) return; // Empêche le double saut si le joueur n'est pas au sol
+
         this.isJumping = true //si on ne saute pas déja, on dit qu'on saute a present
         this.player.setGravityY(0) //on annule la gravité Y
         this.player.setVelocityY(-speed) //on monte de Y en setAcceleration
@@ -61,8 +57,9 @@ export default class MainScene extends Phaser.Scene{
         this.time.delayedCall(y, ()=>{ //on attend y temps la montée.
             this.player.setVelocityY(0) //on stop la montée
             this.player.setGravityY(this.defaultGravityY) //on remet la gravité par défaut //on attend que le joueur touche le sol
-            this.waitHitGround(()=>{this.isJumping = false}) //fin du saut lorsqu'on touche le sol
         })
+
+        this.waitHitGround(()=>{this.isJumping = false}) //fin du saut lorsqu'on touche le sol
     }
     waitHitGround(callback){ //fonction auxiliaire à jump. Attend que this.player.body.touching.down==true
         let interval = setInterval(() => {
