@@ -1,6 +1,6 @@
 import MainScene from "/scenes/MainScene.js";
 
-let config={
+const config={
     type: Phaser.AUTO, //Phaser choisit automatiquement si il faut utiliser Canva ou WebGL
 
     scale: {
@@ -10,7 +10,7 @@ let config={
     with: window.innerWidth, //prend toute la largeur de l'écran
     height: window.innerHeight, //prend toute la hauteur de l'écran
 
-    scenes: [MainScene], //Ajouter chaque scene dans ce tableau
+    scene: [MainScene], //Ajouter chaque scene dans ce tableau
     physics: {
         default:"arcade",
         arcade:{debug:true}
