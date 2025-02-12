@@ -11,7 +11,7 @@ Hydrolia est un jeu vidéo Minecraft en 2D open source, similaire à Terraria. I
 ## Installation
 1. Cloner le dépôt :
     ```sh
-    git clone <URL_DU_DEPOT>
+    git clone https://github.com/LateFR/Hydrolia
     ```
 2. Installer les dépendances nécessaires :
     ```sh
