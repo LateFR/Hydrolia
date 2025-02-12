@@ -1,4 +1,4 @@
-import MainScene from "./scenes/MainScene";
+import MainScene from "../scenes/MainScene";
 
 let config={
     type:Phaser.AUTO,
