@@ -67,9 +67,6 @@ export default class MainScene extends Phaser.Scene{
             this.player.setVelocityY(0) //on stop la montée
             this.player.setGravityY(this.defaultGravityY) //on remet la gravité par défaut
         })
-        while (!this.onTheGround){ //on attent que le joueur touche le sol (onTheGround)
-            this.time.delayedCall(200, ()=>{}) //on attent 20 ms pour pas detruire les performance
-        }
         this.isJumping = false //on dit qu'on a fini le saut
     }
 }
