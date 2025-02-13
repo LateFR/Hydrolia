@@ -1,11 +1,10 @@
-import Player from "../entities/Player.js"
+import Player from "../entities/player.js"
 
 export default class MainScene extends Phaser.Scene{
     constructor(){
         super("MainScene")
         this.player
         this.platform
-        this.cursors
     }
     preload(){  // Fonction où charger nos assets //à déplacer un jour dans une scene spécialisé
         this.load.image("player","/assets/black_square.png") //charge notre image de player (un carré noir pour l'instant)
@@ -14,6 +13,9 @@ export default class MainScene extends Phaser.Scene{
         this.cameras.main.setBackgroundColor(0xffffff) //set le backround en balnc (hex)
 
         this.player = new Player(this,100,100)
+        this.player.create(); // on appelle le create
+        this.add.existing(this.player);
+        this.physics.add.existing(this.player);
 
         //à déplacer dans un fichier entities
         this.platform = this.physics.add.staticGroup({ //groupe d'objet statique. Plateforme dans notre cas
