@@ -7,7 +7,7 @@ const config={
         mode: Phaser.Scale.RESIZE, //redimensionne le jeu automatiquement
         auto: Phaser.Scale.CENTER_BOTH //centre automatiquement le jeu
     },
-    with: window.innerWidth, //prend toute la largeur de l'écran
+    width: window.innerWidth, //prend toute la largeur de l'écran
     height: window.innerHeight, //prend toute la hauteur de l'écran
 
     scene: [MainScene], //Ajouter chaque scene dans ce tableau
