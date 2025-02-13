@@ -1,4 +1,4 @@
-import Player from "../entities/player"
+import Player from "../entities/Player.js"
 
 export default class MainScene extends Phaser.Scene{
     constructor(){
