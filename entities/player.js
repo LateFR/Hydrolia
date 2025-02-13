@@ -15,6 +15,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         this.okEndDashing = false //variable intermediare pour donner la fin du dash et la fin de l'appuit sur la touche E pour empecher le spam
         this.pressed=  false //définit si une touche a été pressee sur la frame
         this.direction = "right" //donne la direction du player. "left" ou "right" pour l'instant
+
+        // Écoute l'événement personnalisé 'landed'
+        this.on('landed', () => {
+            this.isJumping = false;
+        });
     }
     create(){
         this.scene.add.existing(this) //on ajoute le player (this) à la scène et au jeu
@@ -30,9 +35,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         
         if (!this.pressed && !this.isDashing) {
             this.setVelocityX(0);
-        }
-        if (this.body.blocked.down) { //on verifit si on touche le sol. Si oui, on dit que le saut est stoppé
-            this.isJumping=false 
         }
     }
 

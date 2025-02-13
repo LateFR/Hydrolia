@@ -26,7 +26,9 @@ export default class MainScene extends Phaser.Scene{
             frameQuantity: 100,  // Nombre d'objets créés dans le groupe
             setXY: { x: 0, y: this.game.config.height, stepX: 20 }  // Position initiale et intervalle entre les objets
         });
-        this.physics.add.collider(this.player,this.platform)
+        this.physics.add.collider(this.player, this.platform, (player, platform) => {
+            player.emit('landed');//on verifit si on touche le sol. Si oui, on dit que le saut est stoppé
+        });
         this.cursors = this.input.keyboard.createCursorKeys()
 
     }
