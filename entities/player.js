@@ -11,8 +11,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         this.playerSpeed = 200 //vitesse du joueur. Peut importe la direction
         
         this.isJumping = false //pour savoir si on est en train de sauter
-        this.isDashing = false //pour savoir si on est en train de dasher
-        this.okEndDashing = false //variable intermediare pour donner la fin du dash et la fin de l'appuit sur la touche E pour empecher le spam
+        this.isDashing = false //pour savoir si on est en train de dasher. Variable générale utilisable partout
+        this.isCouldownDash = false //variable intermediare pour donner la fin du couldown. Spécifique au dash
         this.pressed=  false //définit si une touche a été pressee sur la frame
         this.direction = "right" //donne la direction du player. "left" ou "right" pour l'instant
 
@@ -74,14 +74,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         if (this.isJumping || !this.body.blocked.down) return; // Empêche le double saut si le joueur n'est pas au sol
 
         this.isJumping = true //si on ne saute pas déja, on dit qu'on saute a present
-        this.setVelocityY(-y)
+        this.setVelocityY(-y) //on donne une impulsion, la gravité fait le reste
 
     }
 
     dash(speed=600,time=200,couldown=1000){ //x=vitesse du dash    time=durée du dash   couldown=durée du couldown  //idée: un élément qui affiche le couldown
-        if (this.isDashing) return
+        if (this.isDashing || this.isCouldownDash) return
         
         this.isDashing = true
+        this.isCouldownDash = true
+        let last_velocity = this.body.velocity.x //permet de conserver la vitesse avant le dash pr pas stopper le mouvement
+
         if (this.direction=="left"){
             this.setFlipX(true) // Retourne le sprite vers la gauche
             speed=-speed //on dash vers la gauche
@@ -91,11 +94,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         this.setVelocityX(speed)
         
         setTimeout(() => {
-            this.setVelocityX(0); // Arrêter le dash après 200ms
+            this.setVelocityX(last_velocity); // Arrêter le dash après 200ms 
+            this.isDashing=false
         }, time);
         
         setTimeout(() => {
-            this.isDashing=false//couldown de 500 ms avant de laisser le joueur redasher
+            this.isCouldownDash=false//couldown de 500 ms avant de laisser le joueur redasher
         }, time+couldown);
     }
 

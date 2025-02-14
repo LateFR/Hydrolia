@@ -23,8 +23,8 @@ export default class MainScene extends Phaser.Scene{
         //à déplacer dans un fichier entities
         this.platform = this.physics.add.staticGroup({ //groupe d'objet statique. Plateforme dans notre cas
             key: 'assets/black_square.png',
-            frameQuantity: 100,  // Nombre d'objets créés dans le groupe
-            setXY: { x: 0, y: this.game.config.height, stepX: 20 }  // Position initiale et intervalle entre les objets
+            frameQuantity: 2000,  // Nombre d'objets créés dans le groupe
+            setXY: { x: 0, y: this.game.config.height, stepX: 30}  // Position initiale et intervalle entre les objets
         });
         this.physics.add.collider(this.player, this.platform, (player, platform) => {
             player.emit('landed');//on verifit si on touche le sol. Si oui, on dit que le saut est stoppé
