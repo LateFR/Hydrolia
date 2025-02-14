@@ -15,7 +15,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         this.isCouldownDash = false //variable intermediare pour donner la fin du couldown. Spécifique au dash
         this.pressed=  false //définit si une touche a été pressee sur la frame
         this.direction = "right" //donne la direction du player. "left" ou "right" pour l'instant
-
+        this.E_pressed = false //pour savoir si la touche E est appuyée. Permet d'empecher le spam de dash sans relacher E
         // Écoute l'événement personnalisé 'landed'
         this.on('landed', () => {
             this.isJumping = false;
@@ -65,7 +65,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
             this.jump()
         })
         this.scene.input.keyboard.on("keydown-E",(event)=>{
+            if(this.E_pressed){ //on ne dash pas si E est déja préssé. Empèche le spam de E
+                return
+            }
+            this.E_pressed = true
             this.dash()
+        })
+        this.scene.input.keyboard.on("keyup-E",(event)=>{
+            this.E_pressed = false
         })
 
     }
