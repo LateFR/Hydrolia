@@ -30,7 +30,7 @@ Pour l'instant, le projet est au début de son développement et n'est pas stabl
 - sheeppcoder
 
 ## Licence
-[![License: CC BY-NC-ND 4.0](https://licensebuttons.net/l/by-nc-nd/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 
+Ce projet est sous la licence Mozilla Public License 2.0 - consultez le fichier [LICENSE](./LICENSE) pour plus de détails.
 ## Remerciements
 Merci à tous ceux qui ont contribué à ce projet.
