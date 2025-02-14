@@ -30,7 +30,7 @@ Pour l'instant, le projet est au début de son développement et n'est pas stabl
 - sheeppcoder
 
 ## Licence
-[Nom de la Licence] (à spécifier)
+[![License: CC BY-NC-ND 4.0](https://licensebuttons.net/l/by-nc-nd/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 
 ## Remerciements
 Merci à tous ceux qui ont contribué à ce projet.
