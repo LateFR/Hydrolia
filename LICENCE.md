@@ -1,16 +1,7 @@
-Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License
+Mozilla Public License 2.0
 
-Copyright (C) 2025 Lucas
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-Ce jeu est protégé par la licence Creative Commons BY-NC-ND 4.0.
-
-Vous avez le droit :
-- De télécharger et exécuter ce jeu pour un usage personnel uniquement.
-- De partager le jeu uniquement dans sa version originale, sans modification.
-- De citer l’auteur en cas de partage.
-
-Vous **n’avez pas** le droit :
-- De modifier et redistribuer une version modifiée du jeu.
-- De vendre, monétiser ou utiliser ce jeu à des fins commerciales.
-
-Plus d’infos : https://creativecommons.org/licenses/by-nc-nd/4.0/
+© LateFR
