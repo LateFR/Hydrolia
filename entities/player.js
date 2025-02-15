@@ -40,12 +40,18 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 
     setupListeners(){//fonction d'initialisation réunnisant tout les listeners
         this.scene.input.keyboard.on("keydown-LEFT",(event)=>{
+            if (this.isDashing){//empêche le player de se déplacer durant le dash
+                return
+            }
             this.setVelocityX(-this.playerSpeed) //on met une velocité de 100 sur l'axe X
             this.pressed=true //on verrouille pour ne pas que le dernier if stop la velocité
             this.direction = "left"
             this.setFlipX(true) // Retourne le sprite vers la gauche
         })
         this.scene.input.keyboard.on("keydown-RIGHT",(event)=>{
+            if (this.isDashing){//empêche le player de se déplacer durant le dash
+                return
+            }
             this.setVelocityX(this.playerSpeed) //on va vers la droite
             this.pressed=true
             this.direction = "right"

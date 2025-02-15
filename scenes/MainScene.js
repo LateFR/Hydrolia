@@ -12,7 +12,7 @@ export default class MainScene extends Phaser.Scene{
     create(){
         this.cameras.main.setBackgroundColor(0xffffff) //set le backround en balnc (hex)
 
-        this.physics.world.setBounds(0, 0, 9999, 9999);// Désactive la limite du monde (donc il faut faire attention a pas faire de lag)
+        this.physics.world.setBounds();// Désactive la limite du monde (donc il faut faire attention a pas faire de lag)
 
         this.player = new Player(this,100,100)
         this.cameras.main.startFollow(this.player, true, 0.1, 0.1); //La caméra suit le joueur
