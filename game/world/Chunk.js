@@ -10,8 +10,8 @@ export default class Chunk extends Phaser.GameObjects.Container{
         //Génération du chunk
         this.Statics = new WorldStatic(scene)
         this.blocs = {} //contient la liste de tous les éléments du chunk et leurs positions => ChildElement: (x,y)
+        alert(Object.keys(this.bloc_map))
         Object.keys(this.bloc_map).forEach(i => {  //bloc_map contient les positions et les types de blocs du chunk => i: ["type",[x,y]]  (note: x et y sont en "format" hydrolia)
-
             let x
             let coor
             let y

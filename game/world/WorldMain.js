@@ -1,5 +1,5 @@
 import WorldGeneration from "../../network/game/WorldGeneration.js"
-import Chunk from "./chunk.js"
+import Chunk from "./Chunk.js"
 
 export default class World{
     constructor(scene,player){
@@ -15,7 +15,7 @@ export default class World{
     // Et la génération progressive des chunks
     generate_chunk(x){ // x=position x du chunk
         let bloc_map = new WorldGeneration(this.seed,x) //génére un chunk (sur le serveur) 
-        let chunk = new Chunk(this.scene,x,400,bloc_map,this.player) //400= position y du chunk, le max
+        let chunk = new Chunk(this.scene,x,0,bloc_map,this.player) //0 = position y du chunk
         this.chunkList.push(chunk)
     }
 }

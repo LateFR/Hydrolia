@@ -20,8 +20,10 @@ export default class WorldGeneration{
 
         try{
             let response = await fetch(url)
+            
             if (response.ok){
-                return await response.json()
+                let data = await response.json()
+                return data
             } else{
                 console.error("Erreur dans la requête pour la génération de chunk", await response.text())
             }
