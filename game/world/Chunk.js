@@ -1,4 +1,4 @@
-import WorldStatic from "./WorldStatic"
+import WorldStatic from "./WorldStatic.js"
 export default class Chunk extends Phaser.GameObjects.Container{
     constructor(scene,x,y,bloc_map){
         super(scene,x,y)
