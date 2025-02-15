@@ -3,7 +3,6 @@ import Chunk from "./Chunk.js"
 
 export default class World{
     constructor(scene,player){
-        super(scene)
         this.scene = scene
         this.player = player //permet d'ajouter des collisions avec le player
         this.bloc_size = scene.game.config.width/20
