@@ -1,6 +1,6 @@
 import WorldStatic from "./WorldStatic.js"
 export default class Chunk extends Phaser.GameObjects.Container{
-    constructor(scene,x,y,bloc_map){
+    constructor(scene,x,y,bloc_map,player){
         this.scene = scene
         this.scene.add.existing(this) // Ajoute le conteneur à la scène
 
@@ -17,6 +17,10 @@ export default class Chunk extends Phaser.GameObjects.Container{
                 if (bloc_map[element]=="dirt"){
                     sprite.setTint(0x6b3f2a)  //Donne une teinte marron au sprite pr le différencier de la stone
                 }
+                
+                this.scene.physics.add.collider(this.player,bloc,(player)=>{ //Ajoute de la collision avec les blocs
+                    player.emit('landed');//on verifit si on touche le sol. Si oui, on dit que le saut est stoppé
+                })
         });
 
         return this

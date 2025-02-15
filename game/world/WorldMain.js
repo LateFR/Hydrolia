@@ -15,10 +15,7 @@ export default class World{
     // Et la génération progressive des chunks
     generate_chunk(x){ // x=position x du chunk
         bloc_map = WorldGeneration(this.seed,x) //génére un chunk (sur le serveur) 
-        let chunk = new Chunk(this.scene,x,y=400,bloc_map=bloc_map)
+        let chunk = new Chunk(this.scene,x,y=400,bloc_map=bloc_map,this.player)
         this.chunkList.push(chunk)
-        this.scene.physics.add.collider(this.player,chunk,(player)=>{
-            player.emit('landed');//on verifit si on touche le sol. Si oui, on dit que le saut est stoppé
-        })
     }
 }
