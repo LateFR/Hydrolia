@@ -1,9 +1,15 @@
 import WorldStatic from "./Statics.js"
 export default class Chunk extends Phaser.GameObjects.Container{
     constructor(scene,x,y,bloc_map,player){
+        super(scene,x,y)
         this.scene = scene
         this.scene.add.existing(this) // Ajoute le conteneur à la scène
         this.player = player
+        this.bloc_map = bloc_map //Contient ce qu'a généré le serveur (le chunk)
+
+        this.bloc
+        this.x
+        this.y
 
         //Génération du chunk
         this.Statics = new WorldStatic(scene)
@@ -15,12 +21,12 @@ export default class Chunk extends Phaser.GameObjects.Container{
                 y = this.Statics.to_phaser_coor(element[1])
                 
 
-                bloc=this.scene.add.sprite(x,y,"player") //a changer lorsque les assets seront plus poussé. Actuellement, représent un bloc noir.
-                bloc.setSize(this.Statics.bloc_size) //définit la taille du bloc
+                this.bloc=this.scene.add.sprite(x,y,"player") //a changer lorsque les assets seront plus poussé. Actuellement, représent un bloc noir.
+                this.bloc.setSize(this.Statics.bloc_size) //définit la taille du bloc
                 this.blocs[bloc] = (x,y)
 
                 if (bloc_map[element]=="dirt"){
-                    sprite.setTint(0x6b3f2a)  //Donne une teinte marron au sprite pr le différencier de la stone
+                    this.bloc.setTint(0x6b3f2a)  //Donne une teinte marron au sprite pr le différencier de la stone
                 }
                 
                 this.scene.physics.add.collider(this.player,bloc,(player)=>{ //Ajoute de la collision avec les blocs

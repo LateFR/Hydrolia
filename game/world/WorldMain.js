@@ -14,8 +14,8 @@ export default class World{
     //ici que doit être géré le cassage de bloc via des évenement.
     // Et la génération progressive des chunks
     generate_chunk(x){ // x=position x du chunk
-        bloc_map = WorldGeneration(this.seed,x) //génére un chunk (sur le serveur) 
-        let chunk = new Chunk(this.scene,x,y=400,bloc_map=bloc_map,this.player)
+        let bloc_map = new WorldGeneration(this.seed,x) //génére un chunk (sur le serveur) 
+        let chunk = new Chunk(this.scene,x,400,bloc_map,this.player) //400= position y du chunk, le max
         this.chunkList.push(chunk)
     }
 }

@@ -14,12 +14,12 @@ export default class WorldGeneration{
             coor_x: x //la coordonnée x la plus à l'ouest du chunk
         }
         // Crée une query string à partir de l'objet params
-        query_seed = new URLSearchParams(params).toString()
+        let query_seed = new URLSearchParams(params).toString()
         
         let url = `${this.url_server}/world_generation/?${query_seed}`
 
         try{
-            response = await fetch(url, {
+            let response = await fetch(url, {
                 method: "GET"
             })
             if (response.ok){
