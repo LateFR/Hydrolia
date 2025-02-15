@@ -7,7 +7,7 @@ export default class World{
         this.player = player //permet d'ajouter des collisions avec le player
         this.bloc_size = scene.game.config.width/20
         this.chunkList = []
-        this.seed = Math.random()*100000 //seed aléatoire
+        this.seed = Math.round(Math.random()*100000) //seed aléatoire
         this.generate_chunk(0)
     }
 
