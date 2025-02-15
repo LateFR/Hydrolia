@@ -1,4 +1,4 @@
-import WorldStatic from "./WorldStatic.js"
+import WorldStatic from "./Statics.js"
 export default class Chunk extends Phaser.GameObjects.Container{
     constructor(scene,x,y,bloc_map,player){
         this.scene = scene
@@ -13,7 +13,7 @@ export default class Chunk extends Phaser.GameObjects.Container{
             if (bloc_map[element]=="dirt" || bloc_map[element]=="stone") //A modifier. Une fonction de transition type=>asset serait mieux
                 x = this.Statics.to_phaser_coor(element[0]) //on transforme nos position hydrolia en position in game
                 y = this.Statics.to_phaser_coor(element[1])
-                alert(x,y)
+                
 
                 bloc=this.scene.add.sprite(x,y,"player") //a changer lorsque les assets seront plus poussé. Actuellement, représent un bloc noir.
                 bloc.setSize(this.Statics.bloc_size) //définit la taille du bloc

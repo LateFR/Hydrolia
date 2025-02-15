@@ -8,7 +8,7 @@ export default class World{
         this.bloc_size = scene.game.config.width/20
         this.chunkList = []
         this.seed = Math.random()*100000 //seed aléatoire
-        
+        this.generate_chunk(0)
     }
 
     //ici que doit être géré le cassage de bloc via des évenement.
