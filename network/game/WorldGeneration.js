@@ -1,4 +1,4 @@
-import MainNetwork from "./MainNetwork";
+import MainNetwork from "./MainNetwork.js";
 
 export default class WorldGeneration{
     constructor(seed,x){

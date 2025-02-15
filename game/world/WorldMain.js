@@ -1,5 +1,5 @@
 import WorldGeneration from "../../network/game/WorldGeneration"
-import Chunk from "./chunk"
+import Chunk from "./Chunk.js"
 
 export default class World extends Phaser.GameObjects{
     constructor(scene,player){
