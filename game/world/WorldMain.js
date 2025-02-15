@@ -1,4 +1,4 @@
-import WorldGeneration from "../../network/game/WorldGeneration"
+import WorldGeneration from "../../network/game/WorldGeneration.js"
 import Chunk from "./Chunk.js"
 
 export default class World extends Phaser.GameObjects{
