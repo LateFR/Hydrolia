@@ -16,7 +16,7 @@ export default class WorldGeneration{
         // Crée une query string à partir de l'objet params
         let query_seed = new URLSearchParams(params).toString()
         
-        let url = `${this.url_server}world_generation/?${query_seed}`
+        let url = `${this.url_server}/world_generation/?${query_seed}`
 
         try{
             let response = await fetch(url)
