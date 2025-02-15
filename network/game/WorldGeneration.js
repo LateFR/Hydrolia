@@ -5,10 +5,9 @@ export default class WorldGeneration{
         this.url_server = MainNetwork.URL_SERVER
         this.seed = seed
         this.id = MainNetwork.ID
-        return this.generateChunk(x)
     }
 
-    async generateChunk(x){
+    async getChunk(x){
         const params = {
             seed: this.seed,
             coor_x: x //la coordonnée x la plus à l'ouest du chunk

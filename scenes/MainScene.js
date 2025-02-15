@@ -16,7 +16,7 @@ export default class MainScene extends Phaser.Scene{
 
         this.physics.world.setBounds(100000,0,200000,400); //set la taille du monde. Ne pas toucher
 
-        this.player = new Player(this,100,100)
+        this.player = new Player(this,0,400)
         this.cameras.main.startFollow(this.player, true, 0.1, 0.1); //La caméra suit le joueur
         this.player.create(); // on appelle le create
         this.add.existing(this.player);
