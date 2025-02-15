@@ -1,10 +1,12 @@
 import Player from "../../entities/player.js"
+import World from "../game/world/WorldMain.js"
 
 export default class MainScene extends Phaser.Scene{
     constructor(){
         super("MainScene")
         this.player
         this.platform
+        this.world = new World()
     }
     preload(){  // Fonction où charger nos assets //à déplacer un jour dans une scene spécialisé
         this.load.image("player","/assets/black_square.png") //charge notre image de player (un carré noir pour l'instant)
@@ -20,12 +22,7 @@ export default class MainScene extends Phaser.Scene{
         this.add.existing(this.player);
         this.physics.add.existing(this.player);
 
-        //à déplacer dans un fichier entities
-        this.platform = this.physics.add.staticGroup({ //groupe d'objet statique. Plateforme dans notre cas
-            key: 'assets/black_square.png',
-            frameQuantity: 200,  // Nombre d'objets créés dans le groupe
-            setXY: { x: 0, y: this.game.config.height, stepX: 30}  // Position initiale et intervalle entre les objets
-        });
+        
         this.physics.add.collider(this.player, this.platform, (player, platform) => {
             player.emit('landed');//on verifit si on touche le sol. Si oui, on dit que le saut est stoppé
         });
