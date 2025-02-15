@@ -1,5 +1,5 @@
 import WorldGeneration from "../../network/game/WorldGeneration.js"
-import Chunk from "./Chunk.js"
+import Chunk from "./chunk.js"
 
 export default class World{
     constructor(scene,player){
