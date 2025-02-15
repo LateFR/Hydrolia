@@ -14,11 +14,13 @@ export default class Chunk extends Phaser.GameObjects.Container{
                 bloc=scene.add.sprite("player") //a changer lorsque les assets seront plus poussé. Actuellement, représent un bloc noir.
                 bloc.setSize(this.Statics.bloc_size) //définit la taille du bloc
                 this.blocs[bloc] == (element)
-                
+
                 if (bloc_map[element]=="dirt"){
                     sprite.setTint(0x6b3f2a)  //Donne une teinte marron au sprite pr le différencier de la stone
                 }
         });
+
+        return this
     }
 
 

@@ -1,10 +1,11 @@
 import MainNetwork from "./MainNetwork";
 
 export default class WorldGeneration{
-    constructor(seed){
+    constructor(seed,x){
         this.url_server = MainNetwork.URL_SERVER
         this.seed = seed
         this.id = MainNetwork.ID
+        return this.generateChunk(x)
     }
 
     async generateChunk(x){
@@ -15,7 +16,7 @@ export default class WorldGeneration{
         // Crée une query string à partir de l'objet params
         query_seed = new URLSearchParams(params).toString()
         
-        let url = `${this.url_server}?${query_seed}`
+        let url = `${this.url_server}/world_generation/?${query_seed}`
 
         try{
             response = await fetch(url, {
