@@ -1,4 +1,3 @@
-import { World } from "matter"
 import WorldStatic from "./WorldStatic.js"
 export default class Chunk extends Phaser.GameObjects.Container{
     constructor(scene,x,y,bloc_map,player){
@@ -14,7 +13,7 @@ export default class Chunk extends Phaser.GameObjects.Container{
                 x = this.Statics.to_phaser_coor(element[0]) //on transforme nos position hydrolia en position in game
                 y = this.Statics.to_phaser_coor(element[1])
 
-                bloc=scene.add.sprite(x,y,"player") //a changer lorsque les assets seront plus poussé. Actuellement, représent un bloc noir.
+                bloc=this.scene.add.sprite(x,y,"player") //a changer lorsque les assets seront plus poussé. Actuellement, représent un bloc noir.
                 bloc.setSize(this.Statics.bloc_size) //définit la taille du bloc
                 this.blocs[bloc] == (x,y)
 
