@@ -1,6 +1,5 @@
 export default class WorldStatic{
     constructor(scene){
-        super(scene)
         this.scene = scene
         this.bloc_size = scene.game.config.width/20
     }
