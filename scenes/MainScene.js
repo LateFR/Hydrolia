@@ -28,7 +28,8 @@ export default class MainScene extends Phaser.Scene{
         this.player.create(); // on appelle le create
         this.add.existing(this.player);
         this.physics.add.existing(this.player);
-
+        this.physics.world.enable(this.player);
+        
         this.world = new World(this,this.player)
         
 
