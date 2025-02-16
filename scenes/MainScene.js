@@ -10,9 +10,9 @@ export default class MainScene extends Phaser.Scene{
         this.world 
     }
     preload(){  // Fonction où charger nos assets //à déplacer un jour dans une scene spécialisé
-        this.load.image("player","/assets/black_square.png") //charge notre image de player (un carré noir pour l'instant)
-        this.load.image("stone","/assets/stone.png")
-        this.load.image("dirt", "/assets/dirt.png")
+        this.load.image("player","/static/assets/black_square.png") //charge notre image de player (un carré noir pour l'instant)
+        this.load.image("stone","/static/assets/stone.png")
+        this.load.image("dirt", "/static/assets/dirt.png")
     }
     create(){
         this.cameras.main.setBackgroundColor(0xffffff) //set le backround en blanc (hex)

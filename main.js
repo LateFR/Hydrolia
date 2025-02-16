@@ -1,4 +1,4 @@
-import MainScene from "/scenes/MainScene.js";
+import MainScene from "/static/scenes/MainScene.js";
 
 const config={
     type: Phaser.AUTO, //Phaser choisit automatiquement si il faut utiliser Canva ou WebGL
