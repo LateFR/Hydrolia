@@ -9,7 +9,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         this.defaultGravityY = 500 //valeur de gravité Y par défaut. Ces 2 variables permettent de revenir a la gravité "normal" après une modification de la gravité
         this.defaultGravityX = 0 //valeur de graité X par défaut
         this.playerSpeed = 200 //vitesse du joueur. Peut importe la direction
-        
+
         this.isJumping = false //pour savoir si on est en train de sauter
         this.isDashing = false //pour savoir si on est en train de dasher. Variable générale utilisable partout
         this.isCouldownDash = false //variable intermediare pour donner la fin du couldown. Spécifique au dash
@@ -26,7 +26,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         this.scene.physics.add.existing(this)
         
         this.setDisplaySize(this.scene.game.config.width/100,this.scene.game.config.height/100) //this.scene.game.config.width/x permet de definir la taille du sprite par rapport a la taille de la fentre et donc de conserver le responsive
-        this.setGravity(this.defaultGravityX,this.defaultGravityY) //definit la gravité du joueur (que du joueur!!)
+        this.setGravity(this.defaultGravityX,0) //definit la gravité du joueur (que du joueur!!). La gravité y sera activé a la fin de la création du premier chunk
         this.setCollideWorldBounds(true); // Empêche de sortir de l'écran 
 
         this.setupListeners()
@@ -34,7 +34,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
     update(){
         
         if (!this.pressed && !this.isDashing) {
-            this.setVelocityX(0);
+            this.setVelocity(0,0);
         }
     }
 
@@ -47,6 +47,22 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
             this.pressed=true //on verrouille pour ne pas que le dernier if stop la velocité
             this.direction = "left"
             this.setFlipX(true) // Retourne le sprite vers la gauche
+        })
+        this.scene.input.keyboard.on("keydown-UP",(event)=>{
+            this.setGravityY(0)
+            if (this.isDashing){//empêche le player de se déplacer durant le dash
+                return
+            }
+            this.setVelocityY(-this.playerSpeed) //on met une velocité de 100 sur l'axe X
+            this.pressed=true //on verrouille pour ne pas que le dernier if stop la velocité
+        })
+        this.scene.input.keyboard.on("keydown-DOWN",(event)=>{
+            this.setGravityY(0)
+            if (this.isDashing){//empêche le player de se déplacer durant le dash
+                return
+            }
+            this.setVelocityY(this.playerSpeed) //on met une velocité de 100 sur l'axe X
+            this.pressed=true //on verrouille pour ne pas que le dernier if stop la velocité
         })
         this.scene.input.keyboard.on("keydown-RIGHT",(event)=>{
             if (this.isDashing){//empêche le player de se déplacer durant le dash
