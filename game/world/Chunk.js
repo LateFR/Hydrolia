@@ -6,15 +6,23 @@ export default class Chunk extends Phaser.GameObjects.Container{
         this.scene.add.existing(this) // Ajoute le conteneur à la scène
         this.player = player
         this.bloc_map = bloc_map //Contient ce qu'a généré le serveur (le chunk)
-
+        
         //Génération du chunk
         this.Statics = new WorldStatic(scene)
         this.blocs = {} //contient la liste de tous les éléments du chunk et leurs positions => ChildElement: (x,y)
-        
         let i = 0
-        setInterval(() => {  //bloc_map contient les positions et les types de blocs du chunk => i: ["type",x,y]  (note: x et y sont en "format" hydrolia)
+        let intervalID = setInterval(() => {  //bloc_map contient les positions et les types de blocs du chunk => i: ["type",x,y]  (note: x et y sont en "format" hydrolia)
             let key=Object.keys(this.bloc_map)[i]
 
+            if (i>Object.keys(this.bloc_map).length){
+                console.log("Creating of Chunk finished")
+                clearInterval(intervalID) //Stop l'interval
+            }
+            
+            if (key==undefined || key[0]=="air"){
+                i+=1
+                return // Signifie qu'il y a un bloc d'air. Peut être modifé par le futur depuis le backend
+            }
             let x
             let y
             let bloc
@@ -27,7 +35,7 @@ export default class Chunk extends Phaser.GameObjects.Container{
                 x,y = this.Statics.to_phaser_coor(x,y) //on transforme nos position hydrolia en position in game
 
                 bloc=this.scene.add.sprite(x,y,"player") //a changer lorsque les assets seront plus poussé. Actuellement, représente un bloc noir.
-                bloc.setSize(this.Statics.bloc_size) //définit la taille du bloc
+                bloc.setSize(10,10) //définit la taille du bloc
 
                 this.blocs[bloc] = [x,y]
 
@@ -45,7 +53,7 @@ export default class Chunk extends Phaser.GameObjects.Container{
         i=0
         setInterval(()=>{
             bloc = Object.keys(this.blocs)[i] //on parcourt tout les blocs
-            
+
             this.scene.physics.add.collider(this.player,bloc,(player)=>{ //Ajoute de la collision avec les blocs
                 player.emit('landed');//on verifit si on touche le sol. Si oui, on dit que le saut est stoppé
             })
