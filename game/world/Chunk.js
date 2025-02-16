@@ -10,7 +10,7 @@ export default class Chunk extends Phaser.GameObjects.Container{
         this.X_of_HigestY = 0 //Stock le y du point le plus haut du chunk
 
         this.Statics = new WorldStatic(scene)
-        this.blocs = {} //contient la liste de tous les éléments du chunk et leurs positions => ChildElement: (x,y)
+        this.blocs = new Map //Map contenant la liste de tous les éléments du chunk et leurs positions => Bloc : [x,y]
 
         return this
     }
@@ -18,18 +18,18 @@ export default class Chunk extends Phaser.GameObjects.Container{
     async create(wait=0){
         return new Promise((resolve) => { //On retourne une promesse pour pouvoir await la création du chunk
             let i = 0
-
+            
+            let keys = Object.keys(this.bloc_map)
             //On utilise un interval pour pouvoir ralentir artificiellement la création du chunk (avec wait) et éviter le lag.
             let intervalID = setInterval(() => {  //bloc_map contient les positions et les types de blocs du chunk => i: ["type",[x,y]]  (note: x et y sont en "format" hydrolia)
-                let key=Object.keys(this.bloc_map)[i]
-
-                if (i>Object.keys(this.bloc_map).length){
+                let key = keys[i]
+                if (i > keys.length){
                     console.log("Creating of Chunk finished")
                     resolve() //On a finit l'execution
                     clearInterval(intervalID) //Stop l'interval
                 }
                 
-                if (key==undefined || this.bloc_map[key]=="air"){
+                if (key==undefined || this.bloc_map[key][0]=="air"){
                     i+=1
                     return // Signifie qu'il y a un bloc d'air. Peut être modifé par le futur depuis le backend
                 }
@@ -56,15 +56,16 @@ export default class Chunk extends Phaser.GameObjects.Container{
                 bloc.body.allowGravity = false; // Il ne doit pas tomber
 
                 this.add(bloc) //Ajoute le bloc au conteneur
-                bloc.setSize(this.Statics.bloc_size,this.Statics.bloc_size) //définit la taille du bloc
+                bloc.setDisplaySize(this.Statics.bloc_size,this.Statics.bloc_size) // définit la taile de l'apparence du blo
                 bloc.setOffset(0, 0); //garentit que la hitbox est bien aligné
                 bloc.setInteractive()
-
-                bloc.on("pointerover",()=>{
-                    console.log("Un bloc est survolé")
-                })
                 
-                this.blocs[bloc] = [x,y]
+                //A rajouter lorsque le cassage des blocs sera implémenté.
+                // bloc.on("pointerover",()=>{
+                //     console.log("Un bloc est survolé")
+                // })
+                
+                // this.blocs.set(bloc,[x,y])
 
                 
             i+=1
@@ -77,8 +78,10 @@ export default class Chunk extends Phaser.GameObjects.Container{
     }
     async endOfLoading(wait){ //Fonction de fin de chargement. A appeller apres le set du chunk, permet de reduire la charge initiale pour le confore utilisateur
         let i=0
-        this.scene.physics.add.collider(this.player, Object.keys(this.blocs)); //Ajoute la collision entre le player et les blocs du chunk
-        this.scene.physics.add.collider(this.player,Object.keys(this.blocs),(player)=>{ //Ajoute un evenement de collision entre le player et les blocs
+        let blocsArray = [...this.blocs.keys()] // On récupere tout les blocs (contenus dans les keys de blocs) et on trasforme tout ca en Array avec "..."
+
+        this.scene.physics.add.collider(this.player, blocsArray); //Ajoute la collision entre le player et les blocs du chunk
+        this.scene.physics.add.collider(this.player, blocsArray,(player)=>{ //Ajoute un evenement de collision entre le player et les blocs
             player.emit('landed');//on verifit si on touche le sol. Si oui, on dit que le saut est stoppé
         })
         
