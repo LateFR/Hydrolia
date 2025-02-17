@@ -41,9 +41,13 @@ export default class World{
         if (first){
             this.rightmost = chunk //Il est a la fois le plus à droite et le plus à gauche
             this.leftmost = chunk
-            this.player.setPosition(this.Static.to_phaser_x(chunk.highestX),this.Static.to_phaser_y(chunk.highestY-3)) //On place le player au point le plus haut du premier chunk (avec un peu plus de hauteur). On le passe avant en position in game
             
-            console.log(this.player.body.y,this.Static.to_phaser_y(chunk.highestY))
+            let newX = this.Static.to_phaser_x(chunk.highestX)
+            let newY = this.Static.to_phaser_y(chunk.highestY-3)
+            
+            this.player.setPosition(newX,newY) //On place le player au point le plus haut du premier chunk (avec un peu plus de hauteur). On le passe avant en position in game
+            this.player.body.reset(newX, newY);
+            
             this.player.setGravityY(this.player.defaultGravityY) //Active la grvité du player
 
             this.firstCreateFinished = true
@@ -67,9 +71,9 @@ export default class World{
         if (!this.firstCreateFinished){
             return
         }
-
+        
         let playerX = this.Static.to_hydrolia_x(this.player.body.x) //Convertit en coor hydrolia
-        // console.log(this.rightmost.referencePoint- playerX)
+        
         if (this.rightmost.referencePoint- playerX < this.Static.SPACING_THRESHOLD){ //Si jamais le player est à moins de 50 blocs du player
             if (this.chunkList.size >= this.Static.NUM_CHUNKS){ //Supprime le chunk à l'opposé si il y a moins 5 chunks chargés
                 this.removeChunk(this.leftmost)
