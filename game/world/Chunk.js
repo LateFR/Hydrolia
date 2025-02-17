@@ -56,11 +56,8 @@ export default class Chunk extends Phaser.GameObjects.Container{
 
                 this.add(bloc) //Ajoute le bloc au conteneur
                 
-                bloc.setDisplaySize(this.Statics.bloc_size,this.Statics.bloc_size) // définit la taile de l'apparence du bloc
-                //bloc.body.setSize(this.Statics.bloc_size,this.Statics.bloc_size)
-                //bloc.setOffset(0, 0); //garentit que la hitbox est bien aligné
-                //bloc.setImmovable(true); // Le bloc ne doit pas bouger quand il est touché
-                bloc.body.allowGravity = false; // Il ne doit pas tomber
+                bloc.setDisplaySize(this.Statics.bloc_size,this.Statics.bloc_size) // définit la taile de la hitbox et de l'apparence du bloc
+                bloc.body.allowGravity = false; // Il n'est pas sensible a la gravité
                 
                 //A rajouter lorsque le cassage des blocs sera implémenté.
                 
