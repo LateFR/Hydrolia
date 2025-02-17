@@ -2,6 +2,9 @@ export default class WorldStatic{
     constructor(scene){
         this.scene = scene
         this.bloc_size = scene.game.config.width/20
+        this.CHUNK_WIDTH = 75
+        this.HEIGHT = 300 //hauteur du monde
+        this.WIDTH = 1000000 //Largeur du monde
     }
     
     to_phaser_x(x=0){ //on peut également appeller avec 1 seule coor et ne recuperer que celle qui nous arrange*

@@ -1,36 +1,24 @@
 import WorldStatic from "./Statics.js"
-export default class Chunk extends Phaser.GameObjects.Container{
-    constructor(scene,x,y,bloc_map,player){
-        super(scene,x,y)
+export default class Chunk{
+    constructor(scene,bloc_map,player){
         this.scene = scene
-        this.scene.add.existing(this) // Ajoute le conteneur à la scène
+        this.scene.add.existing(this) // Ajoute le groupe à la scène
         this.player = player
         this.bloc_map = bloc_map //Contient le chunk généré par le serveur (le chunk)
         this.highestY = 400 //Stock le point hydrolia y le plus haut du chunk pour permettre, si le chunk est le premier, d'y placer le joueur
-        this.X_of_HigestY = 0 //Stock le y du point le plus haut du chunk
+        this.HigestX = 0 //Stock le y du point le plus haut du chunk
 
         this.Statics = new WorldStatic(scene)
         this.blocs = new Map //Map contenant la liste de tous les éléments du chunk et leurs positions => Bloc : [x,y]
 
+        this.chunk = this.scene.physics.add.staticGroup() //Créé le groupe statique, le chunk
         return this
     }
 
-    async create(wait=0){
+    async create(){
         return new Promise((resolve) => { //On retourne une promesse pour pouvoir await la création du chunk
-            let i = 0
-            
-            let keys = Object.keys(this.bloc_map)
-            //On utilise un interval pour pouvoir ralentir artificiellement la création du chunk (avec wait) et éviter le lag.
-            let intervalID = setInterval(() => {  //bloc_map contient les positions et les types de blocs du chunk => i: ["type",[x,y]]  (note: x et y sont en "format" hydrolia)
-                let key = keys[i]
-                if (i > keys.length){
-                    console.log("Creating of Chunk finished")
-                    resolve() //On a finit l'execution
-                    clearInterval(intervalID) //Stop l'interval
-                }
-                
+            Object.keys(this.bloc_map).forEach(key => { //Key est composée ainsi: [type,x,y]
                 if (key==undefined || this.bloc_map[key][0]=="air"){
-                    i+=1
                     return // Signifie qu'il y a un bloc d'air. Peut être modifé par le futur depuis le backend
                 }
                 let x
@@ -50,17 +38,14 @@ export default class Chunk extends Phaser.GameObjects.Container{
                 x = this.Statics.to_phaser_x(x) //on transforme nos position hydrolia en position in game
                 y = this.Statics.to_phaser_y(y)
                 
-                bloc=this.scene.add.sprite(x,y,type)
-                this.scene.physics.add.existing(bloc)
+                bloc = this.chunk.create(x,y,type) // Créé le bloc
                 
+                bloc.setDisplaySize(this.Statics.bloc_size,this.Statics.bloc_size) // définit la taile du bloc   
+                
+                bloc.body.allowGravity = false; // Il ne doit pas tomber (annule la gravité)
+                
+                bloc.body.updateFromGameObject(); //Cette fonction miracle fait correspondre la hitbox et le visuels, reglant tout les problemes de hitbox rencontrés
 
-                this.add(bloc) //Ajoute le bloc au conteneur
-                
-                bloc.setDisplaySize(this.Statics.bloc_size,this.Statics.bloc_size) // définit la taile de l'apparence du bloc
-                bloc.body.setOffset(0, 0); //garentit que la hitbox est bien aligné
-                bloc.body.setImmovable(true); // Le bloc ne doit pas bouger quand il est touché
-                bloc.body.allowGravity = false; // Il ne doit pas tomber
-                
                 //A rajouter lorsque le cassage des blocs sera implémenté.
                 
                 // bloc.setInteractive()
@@ -70,21 +55,15 @@ export default class Chunk extends Phaser.GameObjects.Container{
                 
                 this.blocs.set(bloc,[x,y])
 
-                
-            i+=1
-            if (i%100==0){
-                console.log(i)
-            }
-            },wait);
+            resolve() //On a finit l'execution, on résoud la promesse
+        });
 
         })
     }
-    async endOfLoading(wait){ //Fonction de fin de chargement. A appeller apres le set du chunk, permet de reduire la charge initiale pour le confore utilisateur
-        let i=0
-        let blocsArray = [...this.blocs.keys()] // On récupere tout les blocs (contenus dans les keys de blocs) et on trasforme tout ca en Array avec "..."
+    async endOfLoading(){ //Fonction de fin de chargement. A appeller apres le set du chunk, permet de reduire la charge initiale pour le confort utilisateur
 
-        this.scene.physics.add.collider(this.player, blocsArray); //Ajoute la collision entre le player et les blocs du chunk
-        this.scene.physics.add.collider(this.player, blocsArray,(player)=>{ //Ajoute un evenement de collision entre le player et les blocs
+        this.scene.physics.add.collider(this.player, this.chunk); //Ajoute la collision entre le player et le chunk, et douc touts les blocs
+        this.scene.physics.add.collider(this.player, this.chunk,(player)=>{ //Ajoute un evenement de collision entre le player et les blocs
             player.emit('landed');//on verifit si on touche le sol. Si oui, on dit que le saut est stoppé
         })
         
