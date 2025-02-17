@@ -50,23 +50,26 @@ export default class Chunk extends Phaser.GameObjects.Container{
                 x = this.Statics.to_phaser_x(x) //on transforme nos position hydrolia en position in game
                 y = this.Statics.to_phaser_y(y)
                 
-                bloc=this.scene.physics.add.sprite(x,y,type)
+                bloc=this.scene.add.sprite(x,y,type)
+                this.scene.physics.add.existing(bloc)
                 
-                bloc.setImmovable(true); // Le bloc ne doit pas bouger quand il est touché
-                bloc.body.allowGravity = false; // Il ne doit pas tomber
 
                 this.add(bloc) //Ajoute le bloc au conteneur
-                // bloc.setDisplaySize(this.Statics.bloc_size,this.Statics.bloc_size) // définit la taile de l'apparence du bloc
-                bloc.body.setSize(this.Statics.bloc_size,this.Statics.bloc_size)
-                bloc.setOffset(0, 0); //garentit que la hitbox est bien aligné
-                bloc.setInteractive()
+                
+                bloc.setDisplaySize(this.Statics.bloc_size,this.Statics.bloc_size) // définit la taile de l'apparence du bloc
+                //bloc.body.setSize(this.Statics.bloc_size,this.Statics.bloc_size)
+                //bloc.setOffset(0, 0); //garentit que la hitbox est bien aligné
+                //bloc.setImmovable(true); // Le bloc ne doit pas bouger quand il est touché
+                bloc.body.allowGravity = false; // Il ne doit pas tomber
                 
                 //A rajouter lorsque le cassage des blocs sera implémenté.
+                
+                // bloc.setInteractive()
                 // bloc.on("pointerover",()=>{
                 //     console.log("Un bloc est survolé")
                 // })
                 
-                // this.blocs.set(bloc,[x,y])
+                this.blocs.set(bloc,[x,y])
 
                 
             i+=1
