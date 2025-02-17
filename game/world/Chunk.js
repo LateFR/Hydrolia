@@ -1,12 +1,14 @@
 import WorldStatic from "./Statics.js"
 export default class Chunk{
-    constructor(scene,bloc_map,player){
+    constructor(scene,bloc_map,player,referencePoint){
         this.scene = scene
         this.scene.add.existing(this) // Ajoute le groupe à la scène
         this.player = player
         this.bloc_map = bloc_map //Contient le chunk généré par le serveur (le chunk)
         this.highestY = 400 //Stock le point hydrolia y le plus haut du chunk pour permettre, si le chunk est le premier, d'y placer le joueur
-        this.HigestX = 0 //Stock le y du point le plus haut du chunk
+        this.highestX = 0 //Stock le y du point le plus haut du chunk
+
+        this.referencePoint = referencePoint //Sert de point de référence X du chunk. Permet notament de savoir quand charcher/décharger un chunk
 
         this.Statics = new WorldStatic(scene)
         this.blocs = new Map //Map contenant la liste de tous les éléments du chunk et leurs positions => Bloc : [x,y]
@@ -32,7 +34,7 @@ export default class Chunk{
                 
                 if (y<this.highestY){ //Met à jour le point le plus haut
                     this.highestY = y
-                    this.X_of_HigestY = x
+                    this.highestX = x
                 }
 
                 x = this.Statics.to_phaser_x(x) //on transforme nos position hydrolia en position in game
@@ -55,8 +57,10 @@ export default class Chunk{
                 
                 this.blocs.set(bloc,[x,y])
 
+            });
+            
+            console.log("Chunk created")
             resolve() //On a finit l'execution, on résoud la promesse
-        });
 
         })
     }
@@ -78,5 +82,9 @@ export default class Chunk{
         // },wait)
 
         console.log("Chunk is ready")
+    }
+
+    async delete(){
+        this.chunk.clear(true, true); // Supprime tout le chunk et ses blocs
     }
 }

@@ -30,13 +30,14 @@ export default class MainScene extends Phaser.Scene{
         this.add.existing(this.player);
         this.physics.add.existing(this.player);
         this.physics.world.enable(this.player);
-        
+        console.log("Scène active ?", this.scene.isActive("MainScene"));
         this.world = new World(this,this.player)
         
 
     }
     update() {
         this.player.update() //on "partage" l'update à player
+        this.world.update()
     }
 
 }

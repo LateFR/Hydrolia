@@ -25,7 +25,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         this.scene.add.existing(this) //on ajoute le player (this) à la scène et au jeu
         this.scene.physics.add.existing(this)
         this.setDepth(10) //Place le player au premier plan
-        
+
         this.setDisplaySize(this.scene.game.config.width/100,this.scene.game.config.height/100) //this.scene.game.config.width/x permet de definir la taille du sprite par rapport a la taille de la fentre et donc de conserver le responsive
         this.setGravity(this.defaultGravityX,0) //definit la gravité du joueur (que du joueur!!). La gravité y sera activé a la fin de la création du premier chunk
         this.setCollideWorldBounds(true); // Empêche de sortir de l'écran 
