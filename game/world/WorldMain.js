@@ -23,9 +23,6 @@ export default class World{
     //ici que doit être géré le cassage de bloc via des évenement.
     // Et la génération progressive des chunks
     async createChunk(x,toRight = false, first=false){ // x=position x du chunk   toRight = si le nouveau chunk est le plus a droite (false= c'est le plus a gauche) first = pour savoir si c'est le premier chunk de la game
-        window.onerror = function(message, source, lineno, colno, error) {
-            console.error("Erreur JS détectée :", message, "à", source, "ligne", lineno, "colonne", colno, error);
-        };
         this.inCreating = true
 
         let worldGen = new WorldGeneration(this.seed) //génére un chunk (sur le serveur) 
@@ -46,9 +43,8 @@ export default class World{
             let newY = this.Static.to_phaser_y(chunk.highestY-3)
             
             this.player.setPosition(newX,newY) //On place le player au point le plus haut du premier chunk (avec un peu plus de hauteur). On le passe avant en position in game
-            this.player.body.reset(newX, newY);
             
-            this.player.setGravityY(this.player.defaultGravityY) //Active la grvité du player
+            this.player.setGravityY(this.player.defaultGravityY) //Active la gravité du player
 
             this.firstCreateFinished = true
 
@@ -63,8 +59,9 @@ export default class World{
 
     async removeChunk(chunk){
         this.chunkList.delete(chunk) //Supprime le chunk des chunks actifs
-        this.chunk.delete()
-        this.chunk = null
+        chunk.delete()
+        chunk = null
+        console.log("chunk deleted")
 
     }
     update(){
@@ -73,26 +70,29 @@ export default class World{
         }
         
         let playerX = this.Static.to_hydrolia_x(this.player.body.x) //Convertit en coor hydrolia
+        console.log(this.rightmost.referencePoint- playerX,this.leftmost.referencePoint+ playerX)
         
         if (this.rightmost.referencePoint- playerX < this.Static.SPACING_THRESHOLD){ //Si jamais le player est à moins de 50 blocs du player
             if (this.chunkList.size >= this.Static.NUM_CHUNKS){ //Supprime le chunk à l'opposé si il y a moins 5 chunks chargés
+                console.log(this.chunkList.size)
                 this.removeChunk(this.leftmost)
             }
 
             if (!this.inCreating){
                 let x = this.rightmost.referencePoint + this.Static.CHUNK_WIDTH
-                this.createChunk(x, toRight = true) //On créer un chunk avec la taille d'un chunk plus loin
+                this.createChunk(x,true) //On créer un chunk avec la taille d'un chunk plus loin
             }
 
         }
-        if (this.leftmost.referencePoint- playerX < this.Static.SPACING_THRESHOLD){ //Si jamais le player est à moins de 50 blocs du player
+        if (this.leftmost.referencePoint+ playerX < this.Static.SPACING_THRESHOLD){ //Si jamais le player est à moins de 50 blocs du player
             if (this.chunkList.size >= this.Static.NUM_CHUNKS){ //Supprime le chunk à l'opposé si il y a moins 5 chunks chargés
+                console.log(this.chunkList.size)
                 this.removeChunk(this.leftmost)
             }
 
             if (!this.inCreating){
                 let x = this.leftmost.referencePoint - this.Static.CHUNK_WIDTH
-                this.createChunk(x, toRight = false) //On créer un chunk avec la taille d'un chunk plus loin
+                this.createChunk(x,false) //On créer un chunk avec la taille d'un chunk plus loin
             }
 
         }

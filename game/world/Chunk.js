@@ -2,7 +2,7 @@ import WorldStatic from "./Statics.js"
 export default class Chunk{
     constructor(scene,bloc_map,player,referencePoint){
         this.scene = scene
-        this.scene.add.existing(this) // Ajoute le groupe à la scène
+        
         this.player = player
         this.bloc_map = bloc_map //Contient le chunk généré par le serveur (le chunk)
         this.highestY = 400 //Stock le point hydrolia y le plus haut du chunk pour permettre, si le chunk est le premier, d'y placer le joueur

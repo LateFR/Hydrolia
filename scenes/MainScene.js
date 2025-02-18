@@ -25,11 +25,9 @@ export default class MainScene extends Phaser.Scene{
         this.physics.world.drawDebug = true; // Affiche les limites du monde
 
         this.player = new Player(this,0,Static.to_phaser_y(50)) //On place le player a 360 blocs de haut (y=0 est le haut du monde, et on compte vers le bas)
-        this.cameras.main.startFollow(this.player, true, 1, 1); //La caméra suit le joueur
+        this.cameras.main.startFollow(this.player, true, 0.1, 0.1); //La caméra suit le joueur
         this.player.create(); // on appelle le create
-        this.add.existing(this.player);
-        this.physics.add.existing(this.player);
-        this.physics.world.enable(this.player);
+        
         console.log("Scène active ?", this.scene.isActive("MainScene"));
         this.world = new World(this,this.player)
         
