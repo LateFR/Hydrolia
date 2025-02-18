@@ -6,7 +6,7 @@ export default class WorldStatic{
         this.HEIGHT = 300 //hauteur du monde
         this.WIDTH = 1000000 //Largeur du monde
         this.NUM_CHUNKS = 3 //Nombre de chunks à être charchés en même temps
-        this.SPACING_THRESHOLD = 75 //Le seuil d'espacement (en blocs) entre le player et les chunks les plus loins de lui pour déclancher la création d'un chunk
+        this.SPACING_THRESHOLD = 25 //Le seuil d'espacement (en blocs) entre le player et les chunks les plus loins de lui pour déclancher la création d'un chunk
     }
     
     to_phaser_x(x=0){ //on peut également appeller avec 1 seule coor et ne recuperer que celle qui nous arrange*

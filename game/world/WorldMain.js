@@ -7,9 +7,7 @@ export default class World{
         this.scene = scene
         this.player = player //permet d'ajouter plus tard des collisions avec le player
         
-        this.chunkList = new Map() //Map qui stock en keys les chunks actuellement chargés, et en values le reference point en x
-        this.rightmost //Stock le chunk le plus a droite de chargé
-        this.leftmost //Le plus à gauche
+        this.chunkList = [] //Liste des chunks actuellement chargés. Le plus à droite de la map est en index -1 et le plus à gauche en 0.
         this.inCreating = false //Empêche que plus de 1 chunk soit créé à la fois. Preserve les performances
         this.firstCreateFinished = false //permet d'empecher le lancement d'update tant que l'on a pas créé le premier chunk
 
@@ -33,34 +31,32 @@ export default class World{
         await chunk.create() //On créé le chunk
         await chunk.endOfLoading() //On finalise la création du chunk
 
-        this.chunkList.set(chunk,x)
 
         if (first){
-            this.rightmost = chunk //Il est a la fois le plus à droite et le plus à gauche
-            this.leftmost = chunk
-            
+            this.chunkList.push(chunk)
             let newX = this.Static.to_phaser_x(chunk.highestX)
             let newY = this.Static.to_phaser_y(chunk.highestY-3)
             
             this.player.setPosition(newX,newY) //On place le player au point le plus haut du premier chunk (avec un peu plus de hauteur). On le passe avant en position in game
             
+            this.scene.cameras.main.setScroll(newX,newY)
             this.player.setGravityY(this.player.defaultGravityY) //Active la gravité du player
 
             this.firstCreateFinished = true
 
         }else if(toRight){
-            this.rightmost = chunk
+            this.chunkList.push(chunk) //Ajoute le chunk a la fin
         }else if(!toRight){
-            this.leftmost = chunk
+            this.chunkList.unshift(chunk) //Ajoute le chunk au début
         }
-
         this.inCreating = false //fin de la création
     }
 
     async removeChunk(chunk){
-        this.chunkList.delete(chunk) //Supprime le chunk des chunks actifs
-        chunk.delete()
-        chunk = null
+        let index = this.chunkList.indexOf(chunk) //Cherche l'index du chunk
+        this.chunkList.slice(index,1) //Supprime le chunk des chunks actifs
+        chunk.delete() //Appelle la fonction de suppression du chunk
+        chunk = null //Libère la mémoire
         console.log("chunk deleted")
 
     }
@@ -70,29 +66,29 @@ export default class World{
         }
         
         let playerX = this.Static.to_hydrolia_x(this.player.body.x) //Convertit en coor hydrolia
-        console.log(this.rightmost.referencePoint- playerX,this.leftmost.referencePoint+ playerX)
-        
-        if (this.rightmost.referencePoint- playerX < this.Static.SPACING_THRESHOLD){ //Si jamais le player est à moins de 50 blocs du player
-            if (this.chunkList.size >= this.Static.NUM_CHUNKS){ //Supprime le chunk à l'opposé si il y a moins 5 chunks chargés
-                console.log(this.chunkList.size)
-                this.removeChunk(this.leftmost)
+        console.log(Math.abs(this.chunkList[this.chunkList.length - 1].referencePoint- playerX),Math.abs(this.chunkList[this.chunkList.length - 1].referencePoint- playerX)< this.Static.SPACING_THRESHOLD,Math.abs(this.chunkList[0].referencePoint - playerX),Math.abs(this.chunkList[0].referencePoint - playerX)< this.Static.SPACING_THRESHOLD,"|",this.Static.SPACING_THRESHOLD)
+
+        if (Math.abs(this.chunkList[this.chunkList.length - 1].referencePoint- playerX) < this.Static.SPACING_THRESHOLD){ //Si jamais le player est à moins de 50 (valeur définit dans static) blocs du chunk le plus à droite
+            if (this.chunkList.length >= this.Static.NUM_CHUNKS){ //Supprime le chunk à l'opposé si il y a moins 5 chunks chargés
+                console.log(this.chunkList.length)
+                this.removeChunk(chunkList[this.chunkList.length - 1])
             }
 
             if (!this.inCreating){
-                let x = this.rightmost.referencePoint + this.Static.CHUNK_WIDTH
-                this.createChunk(x,true) //On créer un chunk avec la taille d'un chunk plus loin
+                let x = this.chunkList[this.chunkList.length - 1].referencePoint + this.Static.CHUNK_WIDTH //Définit la position du nouveau chunk en fonction du chunk le plus à droite et de la taille d'un chunk
+                this.createChunk(x,true) //On crée un chunk avec la taille d'un chunk plus loin
             }
 
         }
-        if (this.leftmost.referencePoint+ playerX < this.Static.SPACING_THRESHOLD){ //Si jamais le player est à moins de 50 blocs du player
-            if (this.chunkList.size >= this.Static.NUM_CHUNKS){ //Supprime le chunk à l'opposé si il y a moins 5 chunks chargés
-                console.log(this.chunkList.size)
-                this.removeChunk(this.leftmost)
+        if (Math.abs(this.chunkList[0].referencePoint - playerX) < this.Static.SPACING_THRESHOLD){ //Si jamais le player est à moins de 50 blocs du chunk le plus à gauche
+            if (this.chunkList.length >= this.Static.NUM_CHUNKS){ //Supprime le chunk à l'opposé si il y a moins 5 chunks chargés
+                console.log(this.chunkList.length)
+                this.removeChunk(this.chunkList[0])
             }
 
             if (!this.inCreating){
-                let x = this.leftmost.referencePoint - this.Static.CHUNK_WIDTH
-                this.createChunk(x,false) //On créer un chunk avec la taille d'un chunk plus loin
+                let x = this.chunkList[0].referencePoint - this.Static.CHUNK_WIDTH //Définit la position du nouveau chunk crée en fonction du chunk le plus à gauche et de la taille d'un chunk. Opération inverse que pour la droite car on le nouveau chunk est plus à gauche donc la coor. diminue
+                this.createChunk(x,false) //On crée un chunk avec la taille d'un chunk plus loin
             }
 
         }
