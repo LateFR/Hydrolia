@@ -13,7 +13,7 @@ const config={
     scene: [MainScene], //Ajouter chaque scene dans ce tableau
     physics: {
         default:"arcade",
-        arcade:{debug:true}
+        arcade:{debug:false}
     },
     pixelArt: true, // Évite le flou sur les jeux en pixel art
 }

@@ -22,7 +22,6 @@ export default class MainScene extends Phaser.Scene{
         let heightWorld = Static.to_phaser_y(Static.HEIGHT) //On choisit la taille du monde de façon a ce qu'elle fasse 300(ou la hauteur définie dans Static) bloc de long
         let widthWorld = Static.to_phaser_x(Static.WIDTH)
         this.physics.world.setBounds(-100000,0,widthWorld,heightWorld); //set la taille du monde. Ne pas toucher
-        this.physics.world.drawDebug = true; // Affiche les limites du monde
 
         this.player = new Player(this,0,Static.to_phaser_y(50)) //On place le player a 360 blocs de haut (y=0 est le haut du monde, et on compte vers le bas)
         this.cameras.main.startFollow(this.player, true, 1, 1); //La caméra suit le joueur

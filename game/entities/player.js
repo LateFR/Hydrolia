@@ -40,7 +40,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
     }
 
     setupListeners(){//fonction d'initialisation réunnisant tout les listeners
-        this.scene.input.keyboard.on("keydown-LEFT",(event)=>{
+        this.scene.input.keyboard.on("keydown-Q",(event)=>{
             if (this.isDashing){//empêche le player de se déplacer durant le dash
                 return
             }
@@ -49,7 +49,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
             this.direction = "left"
             this.setFlipX(true) // Retourne le sprite vers la gauche
         })
-        this.scene.input.keyboard.on("keydown-UP",(event)=>{
+        this.scene.input.keyboard.on("keydown-Z",(event)=>{
             this.setGravityY(0)
             if (this.isDashing){//empêche le player de se déplacer durant le dash
                 return
@@ -57,7 +57,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
             this.setVelocityY(-this.playerSpeed) //on met une velocité de 100 sur l'axe X
             this.pressed=true //on verrouille pour ne pas que le dernier if stop la velocité
         })
-        this.scene.input.keyboard.on("keydown-DOWN",(event)=>{
+        this.scene.input.keyboard.on("keydown-S",(event)=>{
             this.setGravityY(0)
             if (this.isDashing){//empêche le player de se déplacer durant le dash
                 return
@@ -65,7 +65,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
             this.setVelocityY(this.playerSpeed) //on met une velocité de 100 sur l'axe X
             this.pressed=true //on verrouille pour ne pas que le dernier if stop la velocité
         })
-        this.scene.input.keyboard.on("keydown-RIGHT",(event)=>{
+        this.scene.input.keyboard.on("keydown-D",(event)=>{
             if (this.isDashing){//empêche le player de se déplacer durant le dash
                 return
             }
@@ -75,11 +75,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
             this.setFlipX(false) // Retourne le sprite vers la droite
         })
 
-        this.scene.input.keyboard.on("keyup-LEFT", (event) => {
+        this.scene.input.keyboard.on("keyup-Q", (event) => {
             this.pressed = false;
         });
 
-        this.scene.input.keyboard.on("keyup-RIGHT", (event) => {
+        this.scene.input.keyboard.on("keyup-D", (event) => {
             this.pressed = false;
         });
 
