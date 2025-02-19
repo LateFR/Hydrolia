@@ -15,6 +15,10 @@ export default class World{
         this.Static = new WorldStatic(this.scene)
         
         this.createChunk(0,true, true) //On crée le premier chunk
+        let x = 0+this.Static.CHUNK_WIDTH //Définit la position du nouveau chunk en fonction du chunk le plus à droite et de la taille d'un chunk (0=position d'origine du chunk 1)
+        this.createChunk(x,true) //Crée le 2e chunk (vers la droite)
+        // x = -this.Static.CHUNK_WIDTH //Définit la position du nouveau chunk en fonction du chunk le plus à droite et de la taille d'un chunk (0=position d'origine du chunk 1)
+        // this.createChunk(x,false) //Crée le 3e chunk (vers la gauche)
         return this
     }
 
@@ -22,7 +26,10 @@ export default class World{
     // Et la génération progressive des chunks
     async createChunk(x,toRight = false, first=false){ // x=position x du chunk   toRight = si le nouveau chunk est le plus a droite (false= c'est le plus a gauche) first = pour savoir si c'est le premier chunk de la game
         this.inCreating = true
-
+        console.log("x:",x)
+        this.chunkList.forEach(chunk => {
+            console.log(chunk.referencePoint)
+        });
         let worldGen = new WorldGeneration(this.seed) //génére un chunk (sur le serveur) 
         
         let bloc_map = await worldGen.getChunk(x)
@@ -57,21 +64,21 @@ export default class World{
         this.chunkList.slice(index,1) //Supprime le chunk des chunks actifs
         chunk.delete() //Appelle la fonction de suppression du chunk
         chunk = null //Libère la mémoire
-        console.log("chunk deleted")
+        console.log("chunk deleted",index)
 
     }
-    update(){
-        if (!this.firstCreateFinished){
+    async update(){
+        if (!this.firstCreateFinished || this.inCreating){
             return
         }
         
         let playerX = this.Static.to_hydrolia_x(this.player.body.x) //Convertit en coor hydrolia
-        console.log(Math.abs(this.chunkList[this.chunkList.length - 1].referencePoint- playerX),Math.abs(this.chunkList[this.chunkList.length - 1].referencePoint- playerX)< this.Static.SPACING_THRESHOLD,Math.abs(this.chunkList[0].referencePoint - playerX),Math.abs(this.chunkList[0].referencePoint - playerX)< this.Static.SPACING_THRESHOLD,"|",this.Static.SPACING_THRESHOLD)
+
+        console.log(this.Static.to_hydrolia_x(this.player.body.x), "|",Math.abs(this.chunkList[this.chunkList.length - 1].referencePoint- playerX),Math.abs(this.chunkList[this.chunkList.length - 1].referencePoint- playerX)< this.Static.SPACING_THRESHOLD,Math.abs(this.chunkList[0].referencePoint - playerX),Math.abs(this.chunkList[0].referencePoint - playerX)< this.Static.SPACING_THRESHOLD,"|",this.Static.SPACING_THRESHOLD)
 
         if (Math.abs(this.chunkList[this.chunkList.length - 1].referencePoint- playerX) < this.Static.SPACING_THRESHOLD){ //Si jamais le player est à moins de 50 (valeur définit dans static) blocs du chunk le plus à droite
-            if (this.chunkList.length >= this.Static.NUM_CHUNKS){ //Supprime le chunk à l'opposé si il y a moins 5 chunks chargés
-                console.log(this.chunkList.length)
-                this.removeChunk(chunkList[this.chunkList.length - 1])
+            if (this.chunkList.length >= this.Static.NUM_CHUNKS){ 
+                this.removeChunk(this.chunkList[0]) //Supprime le chunk à l'opposé si il y a moins 5 chunks chargés
             }
 
             if (!this.inCreating){
@@ -82,8 +89,7 @@ export default class World{
         }
         if (Math.abs(this.chunkList[0].referencePoint - playerX) < this.Static.SPACING_THRESHOLD){ //Si jamais le player est à moins de 50 blocs du chunk le plus à gauche
             if (this.chunkList.length >= this.Static.NUM_CHUNKS){ //Supprime le chunk à l'opposé si il y a moins 5 chunks chargés
-                console.log(this.chunkList.length)
-                this.removeChunk(this.chunkList[0])
+                this.removeChunk(this.chunkList[this.chunkList.length - 1])
             }
 
             if (!this.inCreating){

@@ -16,10 +16,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         this.pressed=  false //définit si une touche a été pressee sur la frame
         this.direction = "right" //donne la direction du player. "left" ou "right" pour l'instant
         this.E_pressed = false //pour savoir si la touche E est appuyée. Permet d'empecher le spam de dash sans relacher E
-        // Écoute l'événement personnalisé 'landed'
-        this.on('landed', () => {
-            this.isJumping = false;
-        });
     }
     create(){
         this.scene.add.existing(this) //on ajoute le player (this) à la scène et au jeu
@@ -31,6 +27,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         this.setCollideWorldBounds(true); // Empêche de sortir de l'écran 
 
         this.setupListeners()
+        
+        // Écoute l'événement personnalisé 'landed'
+        this.on('landed', () => {
+            this.isJumping = false;
+        });
     }
     update(){
         if (!this.pressed && !this.isDashing) {

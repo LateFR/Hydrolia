@@ -9,7 +9,6 @@ export default class Chunk{
         this.highestX = 0 //Stock le y du point le plus haut du chunk
 
         this.referencePoint = referencePoint //Sert de point de référence X du chunk. Permet notament de savoir quand charcher/décharger un chunk
-
         this.Statics = new WorldStatic(scene)
         this.blocs = new Map //Map contenant la liste de tous les éléments du chunk et leurs positions => Bloc : [x,y]
 
@@ -31,7 +30,7 @@ export default class Chunk{
                 x = this.bloc_map[key][1][0] //coordonée x
                 y = this.bloc_map[key][1][1] //coordonée y
                 type = this.bloc_map[key][0] //le type de bloc (dirt,stone,ect.)
-                
+            
                 if (y<this.highestY){ //Met à jour le point le plus haut
                     this.highestY = y
                     this.highestX = x
@@ -48,12 +47,10 @@ export default class Chunk{
                 
                 bloc.body.updateFromGameObject(); //Cette fonction miracle fait correspondre la hitbox et le visuels, reglant tout les problemes de hitbox rencontrés
 
-                //A rajouter lorsque le cassage des blocs sera implémenté.
-                
-                // bloc.setInteractive()
-                // bloc.on("pointerover",()=>{
-                //     console.log("Un bloc est survolé")
-                // })
+                bloc.setInteractive() //Rend le bloc interactif (a la souris notament)
+                bloc.on("pointerdown",()=>{ //Appelle break bloc au click
+                    this.breakBloc(bloc)
+                })
                 
                 this.blocs.set(bloc,[x,y])
 
@@ -86,5 +83,23 @@ export default class Chunk{
 
     async delete(){
         this.chunk.clear(true, true); // Supprime tout le chunk et ses blocs
+    }
+
+    async breakBloc(bloc){
+        const playerX = this.Statics.to_hydrolia_x(this.player.body.x) //Recupere les cooredonnées x et y de player et les passes en coordonnées hydrolia
+        const playerY = this.Statics.to_hydrolia_y(this.player.body.y)
+
+        const blocX = this.Statics.to_hydrolia_x(this.blocs.get(bloc)[0]) //Pour les coor du bloc
+        const blocY = this.Statics.to_hydrolia_y(this.blocs.get(bloc)[1])
+        const max_dist = this.Statics.MAX_DIST_BREAK //Définit la distance maximum a laquelle on peut casser un bloc
+
+        console.log(Math.abs(blocX-playerX),Math.abs(blocY-playerY),max_dist)
+        if (Math.abs(blocX-playerX)>max_dist || Math.abs(blocY-playerY)>max_dist){ //Si le player est a plus de 4 blocs de distance du bloc (x ou y), on ne le supprime pas
+            return
+        }
+        this.chunk.remove(bloc,false,false) //Supprime du groupe mais ne detruit pas l'objet, sinon sa hitbox ne peux pas être supprimée. On doit tout faire manuellement
+        this.blocs.delete(bloc) //Retire du map
+        this.scene.physics.world.remove(bloc.body) //Supprime le corps physique du bloc (sa hitbox)
+        bloc.destroy() // Supprime complètement l'objet de la scène
     }
 }
