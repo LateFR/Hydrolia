@@ -63,9 +63,10 @@ export default class Chunk{
     }
     async endOfLoading(){ //Fonction de fin de chargement. A appeller apres le set du chunk, permet de reduire la charge initiale pour le confort utilisateur
         const player = this.player
+        
         this.scene.physics.add.collider(this.player, this.chunk); //Ajoute la collision entre le player et le chunk, et douc touts les blocs
-        this.scene.physics.add.collider(this.player, this.chunk,(player)=>{ //Ajoute un evenement de collision entre le player et les blocs
-            player.emit('landed');//on verifit si on touche le sol. Si oui, on dit que le saut est stoppé
+        this.scene.physics.add.collider(this.player, this.chunk,()=>{ //Ajoute un evenement de collision entre le player et les blocs
+            this.scene.player.emit('landed');//on verifit si on touche le sol. Si oui, on dit que le saut est stoppé
         })
         
         //Cet interval ne sert actuellement a rien, mais si il y a une boucle a ajouter, merci d'utiliser l'interval

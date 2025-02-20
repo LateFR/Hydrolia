@@ -64,7 +64,7 @@ export default class World{
         this.chunkList.slice(index,1) //Supprime le chunk des chunks actifs
         chunk.delete() //Appelle la fonction de suppression du chunk
         chunk = null //Libère la mémoire
-        console.log("chunk deleted",index)
+        console.log("chunk deleted:",index)
 
     }
     async update(){

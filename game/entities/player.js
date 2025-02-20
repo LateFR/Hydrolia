@@ -30,6 +30,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         
         // Écoute l'événement personnalisé 'landed'
         this.on('landed', () => {
+            console.log("landed")
             this.isJumping = false;
         });
     }
