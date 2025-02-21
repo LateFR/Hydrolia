@@ -30,11 +30,19 @@ export default class MainScene extends Phaser.Scene{
         console.log("Scène active ?", this.scene.isActive("MainScene"));
         this.world = new World(this,this.player)
         
+        this.setupListener()
 
     }
     update() {
         this.player.update() //on "partage" l'update à player
         this.world.update()
+    }
+
+    setupListener(){
+        this.input.keyboard.on("keydown-A",()=>{
+            this.scene.pause() //Met la scene (le jeu) en pause. Est repris par scene.resume("MainScene")
+            this.scene.launch("Inventory") // Ouvre l'inventaire par-dessus la scène du jeu
+        })
     }
 
 }

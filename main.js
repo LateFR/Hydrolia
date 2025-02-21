@@ -1,3 +1,4 @@
+import Inventory from "/static/scenes/Inventory.js";
 import MainScene from "/static/scenes/MainScene.js";
 
 const config={
@@ -10,7 +11,7 @@ const config={
     width: window.innerWidth, //prend toute la largeur de l'écran
     height: window.innerHeight, //prend toute la hauteur de l'écran
 
-    scene: [MainScene], //Ajouter chaque scene dans ce tableau
+    scene: [MainScene,Inventory], //Ajouter chaque scene dans ce tableau
     physics: {
         default:"arcade",
         arcade:{debug:false}
