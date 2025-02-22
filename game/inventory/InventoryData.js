@@ -115,4 +115,8 @@ export default class InventoryData extends Phaser.Plugins.BasePlugin{
         return oldI-i //retourne le nouveau i
 
     }
+
+    getInventory(){
+        return this.inventory
+    }
 }

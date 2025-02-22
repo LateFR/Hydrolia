@@ -42,7 +42,9 @@ export default class Chunk{
                 bloc = this.chunk.create(x,y,type) // Créé le bloc
                 
                 bloc.setDisplaySize(this.Statics.bloc_size,this.Statics.bloc_size) // définit la taile du bloc   
-                
+                bloc.body.setSize(this.Statics.bloc_size,this.Statics.bloc_size)
+                bloc.setOffset(0.5,0.5)
+                bloc.setOrigin(0.5,0.5)
                 bloc.body.allowGravity = false; // Il ne doit pas tomber (annule la gravité)
                 
                 bloc.body.updateFromGameObject(); //Cette fonction miracle fait correspondre la hitbox et le visuels, reglant tout les problemes de hitbox rencontrés
@@ -65,8 +67,8 @@ export default class Chunk{
         const player = this.player
         
         this.scene.physics.add.collider(this.player, this.chunk); //Ajoute la collision entre le player et le chunk, et douc touts les blocs
-        this.scene.physics.add.collider(this.player, this.chunk,()=>{ //Ajoute un evenement de collision entre le player et les blocs
-            this.scene.player.emit('landed');//on verifit si on touche le sol. Si oui, on dit que le saut est stoppé
+        this.scene.physics.add.overlap(this.player, this.chunk,()=>{ //Ajoute un evenement de collision entre le player et les blocs
+            this.scene.events.emit('landed');//on verifit si on touche le sol. Si oui, on dit que le saut est stoppé
         })
         
         //Cet interval ne sert actuellement a rien, mais si il y a une boucle a ajouter, merci d'utiliser l'interval
