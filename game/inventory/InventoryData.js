@@ -5,7 +5,7 @@ export default class InventoryData extends Phaser.Plugins.BasePlugin{
         this.NUMBER_OF_SLOTS = 30 //nombre de slots de l'inventaire
 
         //Créé un tableau inventory stockant le contenu de chaque slot de l'inventaire (numéroté de 0 à NUMBER_OF_SLOT - 1 (ex: 29))
-        //Le tableau est composé ainsi {0:["dirt"(type de l'item), 2 (nombre d'item stacké sur le slot)], 1: null (null si vide), ...}
+        //Le tableau est composé ainsi {0:{"type":"dirt"(type de l'item), "items": 2 (nombre d'item stacké sur le slot)}, 1: null (null si vide), ...}
         this.inventory = {}
         for (let n=0; n<this.NUMBER_OF_SLOTS; n++){
             this.inventory[n] = null
@@ -28,7 +28,7 @@ export default class InventoryData extends Phaser.Plugins.BasePlugin{
             throw new Error("Already exists")
         }
 
-        this.inventory[n] = [type,1]
+        this.inventory[n] = {"type":type, "items":i}
     }
 
     deleteItem(n){ 
@@ -56,7 +56,7 @@ export default class InventoryData extends Phaser.Plugins.BasePlugin{
             throw new Error("Empty error")
         }
         
-        this.inventory[n][1] = i
+        this.inventory[n]["items"] = i
 
     }
     addCount(n,i,safe=false){ 
@@ -69,7 +69,7 @@ export default class InventoryData extends Phaser.Plugins.BasePlugin{
             throw new Error("Empty error")
         }
 
-        let oldI = this.inventory[n][1] //L'ancien contenu de i
+        let oldI = this.inventory[n]["items"] //L'ancien contenu de i
 
         if (i+oldI>100){
             if(safe){
@@ -95,7 +95,7 @@ export default class InventoryData extends Phaser.Plugins.BasePlugin{
             throw new Error("Empty error")
         }
 
-        let oldI = this.inventory[n][1] //L'ancien contenu de i
+        let oldI = this.inventory[n]["items"] //L'ancien contenu de i
 
         if (oldI-i<0){
             if(safe){

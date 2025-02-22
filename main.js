@@ -1,3 +1,4 @@
+import WorldStatic from "/static/game/world/Statics";
 import Inventory from "/static/scenes/Inventory.js";
 import MainScene from "/static/scenes/MainScene.js";
 import InventoryData from "static/game/inventory/InventoryData";
