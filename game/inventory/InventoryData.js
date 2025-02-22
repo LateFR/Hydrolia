@@ -2,7 +2,7 @@ export default class InventoryData extends Phaser.Plugins.BasePlugin{
     constructor(PluginManager){
         super(PluginManager)
 
-        this.NUMBER_OF_SLOTS = 35 //nombre de slots de l'inventaire
+        this.NUMBER_OF_SLOTS = 36 //nombre de slots de l'inventaire
 
         //Créé un tableau inventory stockant le contenu de chaque slot de l'inventaire (numéroté de 0 à NUMBER_OF_SLOT - 1 (ex: 29))
         //Le tableau est composé ainsi {0:{"type":"dirt"(type de l'item), "items": 2 (nombre d'item stacké sur le slot)}, 1: null (null si vide), ...}
@@ -10,6 +10,7 @@ export default class InventoryData extends Phaser.Plugins.BasePlugin{
         for (let n=0; n<this.NUMBER_OF_SLOTS; n++){
             this.inventory[n] = null
         }
+        target = 0 //Le slot (n) selectionné actuellement pour la pose des blocs
     }
 
     isNull(n){
@@ -24,7 +25,7 @@ export default class InventoryData extends Phaser.Plugins.BasePlugin{
     autoAdd(type,i){ 
         //Ajoute automatiquement les items a l'inventaire, soit dans le premier slot libre, soit il rajoute a un slot ayant le meme type. 
         // Retourne false si l'inventaire est plein, true si l'operation a réussi
-        this.inventory.forEach(n => {
+        for(let n=0;n<this.NUMBER_OF_SLOTS;n++){
             if (this.isNull(n)){//Si le slot est vide
                 this.addItem(type,n,i) //On ajoute l'item au slot
                 return true
@@ -32,7 +33,7 @@ export default class InventoryData extends Phaser.Plugins.BasePlugin{
                 this.addCount(n,i)
                 return true
             }
-        });
+        };
 
         return false
     }

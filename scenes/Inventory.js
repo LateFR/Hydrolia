@@ -51,17 +51,21 @@ export default class Inventory extends Phaser.Scene{
         let inventory = this.inventoryData.inventory
         let offsetX = -(this.screenWidth/15) //screenWidth/2 représente la largeur de l'inventaire, et la moitié de screenWidth/2 sa distance entre le centre et le bord
         let offsetY = -(this.screenWidth/15) //Même raisonnement, mais pour la hauteur
-
-        for(let n=0; n<=this.inventoryData.NUMBER_OF_SLOTS; n++){ //n represente le numéro du Slot et va de 0 à 29 (sauf si le nombre de slot a été changé)
-            const x = (n%this.COLUMNS) * (this.SLOT_SIZE+2) +offsetX // slot%this.COLUMNS => donne la colone   * this.SLOT_SIZE => donne la distance par rapport au point 0    +offsetX => decale le point 0 a la gauche de l'inventaire
-            const y = Math.floor(n/this.ROWS) * (this.SLOT_SIZE+2) +offsetY // slot/this.ROWS => la ligne actuelle
-            console.log(n,x,y)
+        
+        for(let n=0; n<this.inventoryData.NUMBER_OF_SLOTS; n++){ //n represente le numéro du Slot et va de 0 à 29 (sauf si le nombre de slot a été changé)
+            const x = ((n)%this.COLUMNS) * (this.SLOT_SIZE+2) +offsetX // slot%this.COLUMNS => donne la colone   * this.SLOT_SIZE => donne la distance par rapport au point 0    +offsetX => decale le point 0 a la gauche de l'inventaire
+            const y = Math.floor((n)/this.ROWS) * (this.SLOT_SIZE+2) +offsetY // slot/this.ROWS => la ligne actuelle
+            
             let slot = this.add.rectangle(x, y, this.SLOT_SIZE, this.SLOT_SIZE, 0xC8AD7F) //Créé un rectangle de largeur et de hauteur SLOT_SIZE, avec la couleur beige foncé
-            if (inventory[n]!=null){//Si le slot est rempli
-                item = this.add.sprite(x,y,inventory[n][type]) //On créé sprite avec l'image de l'item, normalement loadé dans MainScene
-                this.contenerSlot.add(item)
-            }
             this.contenerSlot.add(slot)
+
+            if (inventory[n]!=null){//Si le slot est rempli
+                console.log(inventory[n]["type"],n)
+                let item = this.add.sprite(x,y,inventory[n]["type"]) //On créé sprite avec l'image de l'item, normalement loadé dans MainScene
+                item.setDisplaySize(this.SLOT_SIZE*0.95,this.SLOT_SIZE*0.95) //On le redimensionne et on lui enleve 5% par rapport au rectangle du slot
+                this.contenerSlot.add(item)
+                item.setDepth(30) //Place l'item devant son fond, au premier plan.
+            }
         };
     }
 
