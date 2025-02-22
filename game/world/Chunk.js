@@ -10,6 +10,7 @@ export default class Chunk{
 
         this.referencePoint = referencePoint //Sert de point de référence X du chunk. Permet notament de savoir quand charcher/décharger un chunk
         this.Statics = new WorldStatic(scene)
+        this.InventoryData = scene.plugins.get("InventoryData") //InventoryData est une class. On l'intencit ici
         this.blocs = new Map //Map contenant la liste de tous les éléments du chunk et leurs positions => Bloc : [x,y]
 
         this.chunk = this.scene.physics.add.staticGroup() //Créé le groupe statique, le chunk
@@ -51,6 +52,7 @@ export default class Chunk{
 
                 bloc.setInteractive() //Rend le bloc interactif (a la souris notament)
                 bloc.on("pointerdown",()=>{ //Appelle break bloc au click
+                    this.InventoryData.autoAdd(type,1) //Ajoute 1 du bloc a l'inventaire 
                     this.breakBloc(bloc)
                 })
                 

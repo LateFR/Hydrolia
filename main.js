@@ -1,7 +1,6 @@
-import WorldStatic from "/static/game/world/Statics";
 import Inventory from "/static/scenes/Inventory.js";
 import MainScene from "/static/scenes/MainScene.js";
-import InventoryData from "static/game/inventory/InventoryData";
+import InventoryData from "/static/game/inventory/InventoryData.js";
 
 const config={
     type: Phaser.AUTO, //Phaser choisit automatiquement si il faut utiliser Canva ou WebGL

@@ -2,7 +2,7 @@ export default class InventoryData extends Phaser.Plugins.BasePlugin{
     constructor(PluginManager){
         super(PluginManager)
 
-        this.NUMBER_OF_SLOTS = 30 //nombre de slots de l'inventaire
+        this.NUMBER_OF_SLOTS = 35 //nombre de slots de l'inventaire
 
         //Créé un tableau inventory stockant le contenu de chaque slot de l'inventaire (numéroté de 0 à NUMBER_OF_SLOT - 1 (ex: 29))
         //Le tableau est composé ainsi {0:{"type":"dirt"(type de l'item), "items": 2 (nombre d'item stacké sur le slot)}, 1: null (null si vide), ...}
@@ -12,11 +12,29 @@ export default class InventoryData extends Phaser.Plugins.BasePlugin{
         }
     }
 
+    isNull(n){
+        return this.inventory[n]==null
+    }
     verifyN(n){
         //A appeller avant de modifier inventory, empeche d'utiliser un slot non existant
         if (n>this.NUMBER_OF_SLOTS-1){ //n ne peut pas dépasser le nombre de slots - 1
             throw new Error("Slot value error")
         }
+    }
+    autoAdd(type,i){ 
+        //Ajoute automatiquement les items a l'inventaire, soit dans le premier slot libre, soit il rajoute a un slot ayant le meme type. 
+        // Retourne false si l'inventaire est plein, true si l'operation a réussi
+        this.inventory.forEach(n => {
+            if (this.isNull(n)){//Si le slot est vide
+                this.addItem(type,n,i) //On ajoute l'item au slot
+                return true
+            }else if (this.inventory[n]["type"]==type && i+this.inventory[n]["items"]<100){ //Si le slot possede le meme item et que l'ajout de l'item ne fait pas dépasser la limite du slot
+                this.addCount(n,i)
+                return true
+            }
+        });
+
+        return false
     }
     addItem(type,n,i){ 
         //Fonction add permettant d'ajouter un objet a partir de sa key de load ("stone", "dirt", ect.) et de sa position n dans l'inventaire (0 à 29)
