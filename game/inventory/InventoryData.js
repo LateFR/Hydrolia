@@ -74,6 +74,9 @@ export default class InventoryData extends Phaser.Plugins.BasePlugin{
             throw new Error("Overflow")
         }
         this.verifyN(n)
+        if (i==0){
+            this.deleteItem(n)
+        }
         if (this.inventory[n] == null){
             throw new Error("Empty error")
         }

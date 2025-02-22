@@ -70,7 +70,7 @@ export default class Chunk{
     }
 
     async newBloc(keyBloc){ //Key doit être composé ainsi composée ainsi: [type,x,y]
-        if (keyBloc==undefined || this.bloc_map[keyBloc][0]=="air"){
+        if (keyBloc==undefined || keyBloc[0]=="air"){
             return // Signifie qu'il y a un bloc d'air. Peut être modifé par le futur depuis le backend
         }
         let x
@@ -102,7 +102,7 @@ export default class Chunk{
 
         bloc.setInteractive() //Rend le bloc interactif (a la souris notament)
 
-        typeItem = "block" //Le type d'item (bloc, arme, consomable,ect.) Ici, toujours un bloc
+        let typeItem = "block" //Le type d'item (bloc, arme, consomable,ect.) Ici, toujours un bloc
         bloc.on("pointerdown",()=>{ //Appelle break bloc au click
             this.InventoryData.autoAdd(type,1,typeItem) //Ajoute 1 du bloc a l'inventaire 
             this.breakBloc(bloc)

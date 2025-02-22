@@ -1,6 +1,7 @@
 import Player from "../game/entities/player.js"
 import World from "../game/world/WorldMain.js"
 import WorldStatic from "../game/world/Statics.js"
+import ItemExecutor from "../game/world/ItemExecutor.js"
 
 export default class MainScene extends Phaser.Scene{
     constructor(){
@@ -31,6 +32,8 @@ export default class MainScene extends Phaser.Scene{
         console.log("Scène active ?", this.scene.isActive("MainScene"));
         this.world = new World(this,this.player)
         this.inventoryData = this.plugins.get("InventoryData") //On instencit le plugins InventoryData
+        this.itemExecutor = new ItemExecutor(this)
+        
         this.setupListener()
 
     }
