@@ -8,6 +8,7 @@ export default class MainScene extends Phaser.Scene{
         this.player
         this.platform
         this.world 
+        this.inventoryData
     }
     preload(){  // Fonction où charger nos assets //à déplacer un jour dans une scene spécialisé
         this.load.image("player","/static/assets/black_square.png") //charge notre image de player (un carré noir pour l'instant)
@@ -29,12 +30,12 @@ export default class MainScene extends Phaser.Scene{
         
         console.log("Scène active ?", this.scene.isActive("MainScene"));
         this.world = new World(this,this.player)
-        
+        this.inventoryData = this.plugins.get("InventoryData") //On instencit le plugins InventoryData
         this.setupListener()
 
     }
     update() {
-        this.player.update() //on "partage" l'update à player
+        this.player.update() //on "partage" l'update à player en l'appelant
         this.world.update()
     }
 

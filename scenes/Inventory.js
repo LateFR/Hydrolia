@@ -60,8 +60,8 @@ export default class Inventory extends Phaser.Scene{
             this.contenerSlot.add(slot)
 
             if (inventory[n]!=null){//Si le slot est rempli
-                console.log(inventory[n]["type"],n)
-                let item = this.add.sprite(x,y,inventory[n]["type"]) //On créé sprite avec l'image de l'item, normalement loadé dans MainScene
+                console.log(inventory[n]["is"],n)
+                let item = this.add.sprite(x,y,inventory[n]["is"]) //On créé sprite avec l'image de l'item, normalement loadé dans MainScene
                 item.setDisplaySize(this.SLOT_SIZE*0.95,this.SLOT_SIZE*0.95) //On le redimensionne et on lui enleve 5% par rapport au rectangle du slot
                 this.contenerSlot.add(item)
                 item.setDepth(30) //Place l'item devant son fond, au premier plan.
