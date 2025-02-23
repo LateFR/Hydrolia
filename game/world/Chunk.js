@@ -60,12 +60,14 @@ export default class Chunk{
         const max_dist = this.Statics.MAX_DIST_BREAK //Définit la distance maximum a laquelle on peut casser un bloc
 
         if (Math.abs(blocX-playerX)>max_dist || Math.abs(blocY-playerY)>max_dist){ //Si le player est a plus de 4 blocs de distance du bloc (x ou y), on ne le supprime pas
-            return
+            return false //Permet de savoir que le bloc n'est pas cassable
         }
         this.chunk.remove(bloc,false,false) //Supprime du groupe mais ne detruit pas l'objet, sinon sa hitbox ne peux pas être supprimée. On doit tout faire manuellement
         this.blocs.delete(bloc) //Retire du map
         this.scene.physics.world.remove(bloc.body) //Supprime le corps physique du bloc (sa hitbox)
         bloc.destroy() // Supprime complètement l'objet de la scène
+
+        return true //Permet de savoir que le bloc est cassable (et cassé)
     }
 
     async newBloc(keyBloc){ //Key doit être composé ainsi composée ainsi: [type,[x,y]]
@@ -102,10 +104,13 @@ export default class Chunk{
 
         bloc.setInteractive() //Rend le bloc interactif (a la souris notament)
 
-        let typeItem = "block" //Le type d'item (bloc, arme, consomable,ect.) Ici, toujours un bloc
-        bloc.on("pointerdown",()=>{ //Appelle break bloc au click
-            this.InventoryData.autoAdd(type,1,typeItem) //Ajoute 1 du bloc a l'inventaire 
-            this.breakBloc(bloc)
+        bloc.on("pointerdown",async ()=>{ //Appelle break bloc au click
+            const isBreakable = await this.breakBloc(bloc)
+
+            if (isBreakable){ //Si le bloc est cassable (à moins de 4 blocs de distance)
+                const typeItem = "block" //Le type d'item (bloc, arme, consomable,ect.) Ici, toujours un bloc
+                this.InventoryData.autoAdd(type,1,typeItem) //Ajoute 1 du bloc a l'inventaire 
+            }
         })
         
         this.blocs.set(bloc,[x,y])
