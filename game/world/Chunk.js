@@ -90,7 +90,7 @@ export default class Chunk{
         y = this.Statics.to_phaser_y(y)
         
         bloc = this.chunk.create(x,y,type) // Créé le bloc
-        this.chunk.add(bloc) //On s'assure que les collisions sont mis a jour en ajoutant le bloc explicitement
+        //this.chunk.add(bloc) //On s'assure que les collisions sont mis a jour en ajoutant le bloc explicitement
 
         bloc.setDisplaySize(this.Statics.bloc_size,this.Statics.bloc_size) // définit la taile du bloc   
         bloc.body.setSize(this.Statics.bloc_size,this.Statics.bloc_size)
