@@ -73,8 +73,8 @@ export default class World{
         }
         
         let playerX = this.Static.to_hydrolia_x(this.player.body.x) //Convertit en coor hydrolia
-
-        console.log(this.Static.to_hydrolia_x(this.player.body.x), "|",Math.abs(this.chunkList[this.chunkList.length - 1].referencePoint- playerX),Math.abs(this.chunkList[this.chunkList.length - 1].referencePoint- playerX)< this.Static.SPACING_THRESHOLD,Math.abs(this.chunkList[0].referencePoint - playerX),Math.abs(this.chunkList[0].referencePoint - playerX)< this.Static.SPACING_THRESHOLD,"|",this.Static.SPACING_THRESHOLD)
+        
+        //console.log(this.Static.to_hydrolia_x(this.player.body.x), "|",Math.abs(this.chunkList[this.chunkList.length - 1].referencePoint- playerX),Math.abs(this.chunkList[this.chunkList.length - 1].referencePoint- playerX)< this.Static.SPACING_THRESHOLD,Math.abs(this.chunkList[0].referencePoint - playerX),Math.abs(this.chunkList[0].referencePoint - playerX)< this.Static.SPACING_THRESHOLD,"|",this.Static.SPACING_THRESHOLD)
 
         if (Math.abs(this.chunkList[this.chunkList.length - 1].referencePoint- playerX) < this.Static.SPACING_THRESHOLD){ //Si jamais le player est à moins de 50 (valeur définit dans static) blocs du chunk le plus à droite
             if (this.chunkList.length >= this.Static.NUM_CHUNKS){ 
@@ -99,5 +99,17 @@ export default class World{
 
         }
 
+    }
+
+    getPlayerChunk(playerX = null) {
+        if(playerX==null){ //On peut indiquer soit meme le playerX, mais si on ne le fait pas, la fonction le fait elle meme
+            playerX = this.Static.to_hydrolia_x(this.player.body.x); // Conversion en coordonnées Hydrolia
+        }
+        for (let chunk of this.chunkList) {
+            if (Math.abs(playerX-chunk.referencePoint) <= this.Static.CHUNK_WIDTH/2) {
+                return chunk; // Retourne l'objet chunk correspondant
+            }
+        }
+        return null; // Si le joueur est hors des chunks chargés
     }
 }

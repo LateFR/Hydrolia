@@ -5,6 +5,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 
         this.scene = scene
         this.cursors
+        this.inventoryData = this.scene.plugins.get("InventoryData") //On instencit le plugins InventoryData
 
         this.defaultGravityY = 500 //valeur de gravité Y par défaut. Ces 2 variables permettent de revenir a la gravité "normal" après une modification de la gravité
         this.defaultGravityX = 0 //valeur de graité X par défaut
@@ -27,12 +28,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         this.setCollideWorldBounds(true); // Empêche de sortir de l'écran 
 
         this.setupListeners()
-        
-        // Écoute l'événement personnalisé 'landed'
-        this.on('landed', () => {
-            console.log("landed")
-            this.isJumping = false;
-        });
     }
     update(){
         if (!this.pressed && !this.isDashing) {
@@ -42,40 +37,41 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 
     setupListeners(){//fonction d'initialisation réunnisant tout les listeners
         this.scene.input.keyboard.on("keydown-Q",(event)=>{
-            if (this.isDashing){//empêche le player de se déplacer durant le dash
+            if (this.isDashing || this.pressed){//empêche le player de se déplacer durant le dash on ne fait rien si on se déplace déja
                 return
             }
             this.setVelocityX(-this.playerSpeed) //on met une velocité de 100 sur l'axe X
             this.pressed=true //on verrouille pour ne pas que le dernier if stop la velocité
             this.direction = "left"
-            this.setFlipX(true) // Retourne le sprite vers la gauche
-        })
-        this.scene.input.keyboard.on("keydown-Z",(event)=>{
-            this.setGravityY(0)
-            if (this.isDashing){//empêche le player de se déplacer durant le dash
-                return
+            if (!this.flipX){
+                this.setFlipX(true) // Retourne le sprite vers la gauche
             }
-            this.setVelocityY(-this.playerSpeed) //on met une velocité de 100 sur l'axe X
-            this.pressed=true //on verrouille pour ne pas que le dernier if stop la velocité
         })
-        this.scene.input.keyboard.on("keydown-S",(event)=>{
-            this.setGravityY(0)
-            if (this.isDashing){//empêche le player de se déplacer durant le dash
-                return
-            }
-            this.setVelocityY(this.playerSpeed) //on met une velocité de 100 sur l'axe X
-            this.pressed=true //on verrouille pour ne pas que le dernier if stop la velocité
-        })
+        
         this.scene.input.keyboard.on("keydown-D",(event)=>{
-            if (this.isDashing){//empêche le player de se déplacer durant le dash
+            if (this.isDashing || this.pressed){//empêche le player de se déplacer durant le dash et on ne fait rien si on se déplace déja
                 return
             }
             this.setVelocityX(this.playerSpeed) //on va vers la droite
             this.pressed=true
             this.direction = "right"
-            this.setFlipX(false) // Retourne le sprite vers la droite
+            if(this.flipX){
+                this.setFlipX(false) // Retourne le sprite vers la droite
+            }
         })
-
+        this.scene.input.keyboard.on("keydown-Z",()=>{//0n change de target de slot avec Z (vers le haut) ou S (vers le bas)
+            this.inventoryData.target+=1
+            if(this.inventoryData.target >= this.inventoryData.NUMBER_OF_SLOTS){
+                this.inventoryData.target = 0
+            }
+        })
+        
+        this.scene.input.keyboard.on("keydown-S",()=>{//0n change de target de slot avec Z (vers le haut) ou S (vers le bas)
+            this.inventoryData.target-=1
+            if(this.inventoryData.target < 0){
+                this.inventoryData.target = this.inventoryData.NUMBER_OF_SLOTS
+            }
+        })
         this.scene.input.keyboard.on("keyup-Q", (event) => {
             this.pressed = false;
         });
@@ -99,6 +95,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
             this.E_pressed = false
         })
 
+
+        // Écoute l'événement personnalisé 'landed'
+        this.scene.events.on('landed', () => {
+            console.log("landed")
+            this.isJumping = false;
+        });
     }
     jump(y=500){ //fonction de saut. Y designe la hauteur du saut
 
