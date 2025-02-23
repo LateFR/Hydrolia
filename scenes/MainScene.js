@@ -10,6 +10,7 @@ export default class MainScene extends Phaser.Scene{
         this.platform
         this.world 
         this.inventoryData
+        this.targetText
     }
     preload(){  // Fonction où charger nos assets //à déplacer un jour dans une scene spécialisé
         this.load.image("player","/static/assets/black_square.png") //charge notre image de player (un carré noir pour l'instant)
@@ -29,17 +30,24 @@ export default class MainScene extends Phaser.Scene{
         this.cameras.main.startFollow(this.player, true, 1, 1); //La caméra suit le joueur
         this.player.create(); // on appelle le create
         
+        this.targetText = this.add.text(this.scale.width*0.95,this.scale.height*0.95,"" , {
+            fontSize: '24px',
+            color: '#ffffff'
+        }).setScrollFactor(0);//setScrollFactor empeche le texte de bouger. Il restera a la meme place.
+        this.targetText.setDepth(15) //Place le texte au premier plan, devant tout element du jeu
+
         console.log("Scène active ?", this.scene.isActive("MainScene"));
         this.world = new World(this,this.player)
         this.inventoryData = this.plugins.get("InventoryData") //On instencit le plugins InventoryData
         this.itemExecutor = new ItemExecutor(this)
-        
+
         this.setupListener()
 
     }
     update() {
         this.player.update() //on "partage" l'update à player en l'appelant
         this.world.update()
+        this.targetText.setText(this.inventoryData.target) //Met a jour le target
     }
 
     setupListener(){

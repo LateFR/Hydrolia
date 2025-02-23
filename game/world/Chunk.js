@@ -19,7 +19,7 @@ export default class Chunk{
 
     async create(){
         return new Promise((resolve) => { //On retourne une promesse pour pouvoir await la création du chunk
-            Object.keys(this.bloc_map).forEach(key => {this.newBloc(this.bloc_map[key])}) //Key est composée ainsi: [type,x,y]
+            Object.keys(this.bloc_map).forEach(key => {this.newBloc(this.bloc_map[key])}) //Key est composée ainsi: [type,[x,y]]
             
             console.log("Chunk created")
             resolve() //On a finit l'execution, on résoud la promesse
@@ -59,7 +59,6 @@ export default class Chunk{
         const blocY = this.Statics.to_hydrolia_y(this.blocs.get(bloc)[1])
         const max_dist = this.Statics.MAX_DIST_BREAK //Définit la distance maximum a laquelle on peut casser un bloc
 
-        console.log(Math.abs(blocX-playerX),Math.abs(blocY-playerY),max_dist)
         if (Math.abs(blocX-playerX)>max_dist || Math.abs(blocY-playerY)>max_dist){ //Si le player est a plus de 4 blocs de distance du bloc (x ou y), on ne le supprime pas
             return
         }
@@ -69,7 +68,7 @@ export default class Chunk{
         bloc.destroy() // Supprime complètement l'objet de la scène
     }
 
-    async newBloc(keyBloc){ //Key doit être composé ainsi composée ainsi: [type,x,y]
+    async newBloc(keyBloc){ //Key doit être composé ainsi composée ainsi: [type,[x,y]]
         if (keyBloc==undefined || keyBloc[0]=="air"){
             return // Signifie qu'il y a un bloc d'air. Peut être modifé par le futur depuis le backend
         }
@@ -91,7 +90,8 @@ export default class Chunk{
         y = this.Statics.to_phaser_y(y)
         
         bloc = this.chunk.create(x,y,type) // Créé le bloc
-        
+        this.chunk.add(bloc) //On s'assure que les collisions sont mis a jour en ajoutant le bloc explicitement
+
         bloc.setDisplaySize(this.Statics.bloc_size,this.Statics.bloc_size) // définit la taile du bloc   
         bloc.body.setSize(this.Statics.bloc_size,this.Statics.bloc_size)
         bloc.setOffset(0.5,0.5)

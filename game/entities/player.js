@@ -5,6 +5,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 
         this.scene = scene
         this.cursors
+        this.inventoryData = this.scene.plugins.get("InventoryData") //On instencit le plugins InventoryData
 
         this.defaultGravityY = 500 //valeur de gravité Y par défaut. Ces 2 variables permettent de revenir a la gravité "normal" après une modification de la gravité
         this.defaultGravityX = 0 //valeur de graité X par défaut
@@ -58,7 +59,19 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
                 this.setFlipX(false) // Retourne le sprite vers la droite
             }
         })
-
+        this.scene.input.keyboard.on("keydown-Z",()=>{//0n change de target de slot avec Z (vers le haut) ou S (vers le bas)
+            this.inventoryData.target+=1
+            if(this.inventoryData.target >= this.inventoryData.NUMBER_OF_SLOTS){
+                this.inventoryData.target = 0
+            }
+        })
+        
+        this.scene.input.keyboard.on("keydown-S",()=>{//0n change de target de slot avec Z (vers le haut) ou S (vers le bas)
+            this.inventoryData.target-=1
+            if(this.inventoryData.target < 0){
+                this.inventoryData.target = this.inventoryData.NUMBER_OF_SLOTS
+            }
+        })
         this.scene.input.keyboard.on("keyup-Q", (event) => {
             this.pressed = false;
         });

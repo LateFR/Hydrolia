@@ -3,7 +3,6 @@ export default class InventoryData extends Phaser.Plugins.BasePlugin{
         super(PluginManager)
 
         this.NUMBER_OF_SLOTS = 36 //nombre de slots de l'inventaire
-
         //Créé un tableau inventory stockant le contenu de chaque slot de l'inventaire (numéroté de 0 à NUMBER_OF_SLOT - 1 (ex: 29))
         //Le tableau est composé ainsi {0:{"is":"dirt"(ce qu'est l'item: dirt,stone,ect.), "items": 2 (nombre d'item stacké sur le slot), "type":"block" (si l'item est un bloc, une arme, un utilisable, ect.)}, 1: null (null si vide), ...}
         this.inventory = {}
