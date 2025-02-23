@@ -32,7 +32,7 @@ export default class MainScene extends Phaser.Scene{
         
         this.targetText = this.add.text(this.scale.width*0.95,this.scale.height*0.95,"" , {
             fontSize: '24px',
-            color: '#ffffff'
+            color: '#000000'  // Noir
         }).setScrollFactor(0);//setScrollFactor empeche le texte de bouger. Il restera a la meme place.
         this.targetText.setDepth(15) //Place le texte au premier plan, devant tout element du jeu
 
