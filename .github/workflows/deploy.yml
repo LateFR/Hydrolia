@@ -9,7 +9,7 @@ on:
 jobs:
   check_quality_gate:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'workflow_dispatch' }}  # Ignore si c'est un workflow manuel
+    if: ${{ github.event_name != 'workflow_dispatch' }}  # Ne s'exécute pas si c'est un workflow manuel
     steps:
       - name: Check Quality Gate
         id: sonar
@@ -27,18 +27,16 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   deploy:
-    needs: check_quality_gate  # Ce job s'exécute seulement si 'check_quality_gate' réussit, sauf si manuel
     runs-on: ubuntu-latest
     steps:
       - name: Deploy
         run: |
+          # Si c'est un déclenchement manuel, on affiche un message et on passe directement au déploiement
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             echo "Bypassing quality gate check due to manual trigger."
           else
             echo "Running quality gate check..."
           fi
-          
-          echo: ${{ secrets.DEPLOY_TOKEN }}
           
           # Effectue le déploiement
           response=$(curl -s -w "%{http_code}" -X POST "http://88.160.36.153:50080/redeploy/front-end?secret_key=${{ secrets.DEPLOY_TOKEN }}" -o response.json)
@@ -51,5 +49,3 @@ jobs:
           fi
           
           echo "Deployment succeeded."
-        env:
-          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
