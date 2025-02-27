@@ -31,4 +31,5 @@ jobs:
       - name: Deploy
         run: |
           curl -X POST "http://88.160.36.153:50080/update" \
-               -d "secret=${{ secrets.DEPLOY_TOKEN }}"
+          -H "Content-Type: application/json" \
+          -d '{"secret": "${{ secrets.DEPLOY_TOKEN }}"}'
