@@ -1,6 +1,8 @@
 name: Deploy on Hydrolia Server
 
 on: 
+  workflow_dispatch:
+  # Trigger the workflow on pushes to the main branch
   push:
     branches:
       - main  # Déclenche seulement sur main
