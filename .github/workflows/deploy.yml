@@ -1,10 +1,10 @@
 name: Deploy on Hydrolia Server
 
 on: 
-  workflow_dispatch:
+  workflow_dispatch: #activation manuel possible
   push:
     branches:
-      - main  # Déclenche seulement sur main
+      - prod  # Déclenche seulement sur prod
 
 jobs:
   check_quality_gate:
@@ -31,6 +31,4 @@ jobs:
     steps:
       - name: Deploy
         run: |
-          curl -X POST "http://88.160.36.153:50080/redeploy/front-end" \
-          -H "Content-Type: application/json" \
-          -d '{"secret": "${{ secrets.DEPLOY_TOKEN }}"}'
+          curl -X POST "http://88.160.36.153:50080/redeploy/front-end?secret_key=${{ secrets.DEPLOY_TOKEN }}"
