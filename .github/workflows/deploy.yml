@@ -1,6 +1,8 @@
 name: Deploy on Hydrolia Server
 
 on: 
+  workflow_dispatch:
+  # Trigger the workflow on pushes to the main branch
   push:
     branches:
       - main  # Déclenche seulement sur main
@@ -30,5 +32,5 @@ jobs:
     steps:
       - name: Deploy
         run: |
-          curl -X POST "http://88.160.36.153:50080/update" \
+          curl -X POST "http://88.160.36.153:50080/redeploy/front-end" \
                -d "secret=${{ secrets.DEPLOY_TOKEN }}"
