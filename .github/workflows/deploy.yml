@@ -1,7 +1,7 @@
 name: Deploy on Hydrolia Server
 
 on: 
-  check_quality_gate:
+  workflow_dispatch:
   push:
     branches:
       - main  # Déclenche seulement sur main
