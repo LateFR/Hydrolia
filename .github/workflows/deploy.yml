@@ -1,12 +1,7 @@
 name: Deploy on Hydrolia Server
 
 on: 
-<<<<<<< HEAD
-  workflow_dispatch:
-  # Trigger the workflow on pushes to the main branch
-=======
   workflow_dispatch: # Activation manuelle possible
->>>>>>> workflow
   push:
     branches:
       - prod  # Déclenche seulement sur prod
