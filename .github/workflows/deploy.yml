@@ -1,6 +1,7 @@
 name: Deploy on Hydrolia Server
 
 on: 
+  check_quality_gate:
   push:
     branches:
       - main  # Déclenche seulement sur main
@@ -30,6 +31,6 @@ jobs:
     steps:
       - name: Deploy
         run: |
-          curl -X POST "http://88.160.36.153:50080/update" \
+          curl -X POST "http://88.160.36.153:50080/redeploy/front-end" \
           -H "Content-Type: application/json" \
           -d '{"secret": "${{ secrets.DEPLOY_TOKEN }}"}'
