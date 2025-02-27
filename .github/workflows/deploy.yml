@@ -1,0 +1,34 @@
+name: Deploy on Hydrolia Server
+
+on: 
+  push:
+    branches:
+      - main  # Déclenche seulement sur main
+
+jobs:
+  check_quality_gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Quality Gate
+        id: sonar
+        run: |
+          STATUS=$(curl -s -u "${{ secrets.SONAR_TOKEN }}:" \
+            "https://sonarcloud.io/api/qualitygates/project_status?projectKey=LateFR_Hydrolia" \
+            | jq -r '.projectStatus.status')
+
+          echo "Quality Gate status: $STATUS"
+          if [[ "$STATUS" != "OK" ]]; then
+            echo "Quality Gate failed, stopping workflow."
+            exit 1
+          fi
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  deploy:
+    needs: check_quality_gate  # Ce job s'exécute seulement si 'check_quality_gate' réussit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: |
+          curl -X POST "http://88.160.36.153:50080/update" \
+               -d "secret=${{ secrets.DEPLOY_TOKEN }}"
