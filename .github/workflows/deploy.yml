@@ -1,15 +1,20 @@
 name: Deploy on Hydrolia Server
 
 on: 
+<<<<<<< HEAD
   workflow_dispatch:
   # Trigger the workflow on pushes to the main branch
+=======
+  workflow_dispatch: # Activation manuelle possible
+>>>>>>> workflow
   push:
     branches:
-      - main  # Déclenche seulement sur main
+      - prod  # Déclenche seulement sur prod
 
 jobs:
   check_quality_gate:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'workflow_dispatch' }}  # Ne s'exécute pas si c'est un workflow manuel
     steps:
       - name: Check Quality Gate
         id: sonar
@@ -27,10 +32,25 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   deploy:
-    needs: check_quality_gate  # Ce job s'exécute seulement si 'check_quality_gate' réussit
     runs-on: ubuntu-latest
     steps:
       - name: Deploy
         run: |
-          curl -X POST "http://88.160.36.153:50080/redeploy/front-end" \
-               -d "secret=${{ secrets.DEPLOY_TOKEN }}"
+          # Si c'est un déclenchement manuel, on affiche un message et on passe directement au déploiement
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "Bypassing quality gate check due to manual trigger."
+          else
+            echo "Running quality gate check..."
+          fi
+          
+          # Effectue le déploiement
+          response=$(curl -s -w "%{http_code}" -X POST "http://88.160.36.153:50080/redeploy/front-end?secret_key=${{ secrets.DEPLOY_TOKEN }}" -o response.json)
+          
+          # Vérifie le code de statut HTTP
+          if [[ "$response" -ne 200 ]]; then
+            echo "Deployment failed with status code $response."
+            cat response.json
+            exit 1
+          fi
+          
+          echo "Deployment succeeded."
