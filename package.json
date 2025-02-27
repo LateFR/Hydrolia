@@ -10,8 +10,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Hydrolia est un jeu vidéo Minecraft en 2D open source, similaire à Terraria. Il inclut des événements multijoueur, etc.",
   "dependencies": {
-    "phaser": "^3.88.1"
+    "phaser": "^3.88.2"
   }
 }
