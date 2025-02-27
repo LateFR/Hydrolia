@@ -38,6 +38,8 @@ jobs:
             echo "Running quality gate check..."
           fi
           
+          echo: ${{ secrets.DEPLOY_TOKEN }}
+          
           # Effectue le déploiement
           response=$(curl -s -w "%{http_code}" -X POST "http://88.160.36.153:50080/redeploy/front-end?secret_key=${{ secrets.DEPLOY_TOKEN }}" -o response.json)
           
@@ -49,3 +51,5 @@ jobs:
           fi
           
           echo "Deployment succeeded."
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
