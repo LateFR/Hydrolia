@@ -31,4 +31,4 @@ jobs:
     steps:
       - name: Deploy
         run: |
-          curl -X POST "http://88.160.36.153:50080/redeploy/front-end/?secret_key=${{ secrets.DEPLOY_TOKEN }}"
+          curl -X POST "http://88.160.36.153:50080/redeploy/front-end?secret_key=${{ secrets.DEPLOY_TOKEN }}"
