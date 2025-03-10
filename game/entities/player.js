@@ -17,6 +17,16 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         this.pressed=  false //définit si une touche a été pressee sur la frame
         this.direction = "right" //donne la direction du player. "left" ou "right" pour l'instant
         this.E_pressed = false //pour savoir si la touche E est appuyée. Permet d'empecher le spam de dash sans relacher E
+        this.load.spritesheet('player marche droite', 'personnage marche droite.json', {
+            frameWidth: 32,
+            frameHeight: 48
+        });//charge le spirtesheet de la marche vers la droite
+        this.anims.create({
+            key: 'walk right',
+            frames: this.anims.generateFrameNumbers('player marche droite', { start: 0, end: 3 }),
+            frameRate: 10, // Nombre de frames par seconde
+            repeat: -1 // Répétition infinie
+        });//créer l'animation de marche vers la droite
     }
     create(){
         this.scene.add.existing(this) //on ajoute le player (this) à la scène et au jeu
@@ -78,6 +88,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 
         this.scene.input.keyboard.on("keyup-D", (event) => {
             this.pressed = false;
+            "player marche droite".anims.stop();//on stop l'animation de marche vers la droite
         });
 
 

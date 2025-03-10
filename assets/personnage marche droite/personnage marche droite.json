@@ -1,0 +1,111 @@
+{
+  "frames": {
+    "personnage marche droite 1.png": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 140,
+        "h": 250
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 440,
+        "y": 180,
+        "w": 140,
+        "h": 250
+      },
+      "sourceSize": {
+        "w": 1000,
+        "h": 640
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "personnage marche droite 2.png": {
+      "frame": {
+        "x": 0,
+        "y": 250,
+        "w": 140,
+        "h": 250
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 440,
+        "y": 180,
+        "w": 140,
+        "h": 250
+      },
+      "sourceSize": {
+        "w": 1000,
+        "h": 640
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "personnage marche droite 3.png": {
+      "frame": {
+        "x": 0,
+        "y": 500,
+        "w": 140,
+        "h": 250
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 440,
+        "y": 180,
+        "w": 140,
+        "h": 250
+      },
+      "sourceSize": {
+        "w": 1000,
+        "h": 640
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "personnage marche droite 4.png": {
+      "frame": {
+        "x": 0,
+        "y": 750,
+        "w": 140,
+        "h": 250
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 440,
+        "y": 180,
+        "w": 140,
+        "h": 250
+      },
+      "sourceSize": {
+        "w": 1000,
+        "h": 640
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "texture.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 140,
+      "h": 1000
+    },
+    "scale": 1
+  }
+}
