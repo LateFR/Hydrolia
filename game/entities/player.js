@@ -1,3 +1,4 @@
+import WorldStatic from "../world/Statics.js"
 export default class Player extends Phaser.Physics.Arcade.Sprite{
     //note: ici, this designe le player et ses propriétés
     constructor(scene,x,y){
@@ -17,23 +18,19 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         this.pressed=  false //définit si une touche a été pressee sur la frame
         this.direction = "right" //donne la direction du player. "left" ou "right" pour l'instant
         this.E_pressed = false //pour savoir si la touche E est appuyée. Permet d'empecher le spam de dash sans relacher E
-        this.load.spritesheet('player marche droite', 'personnage marche droite.json', {
-            frameWidth: 32,
-            frameHeight: 48
-        });//charge le spirtesheet de la marche vers la droite
-        this.anims.create({
-            key: 'walk right',
-            frames: this.anims.generateFrameNumbers('player marche droite', { start: 0, end: 3 }),
-            frameRate: 10, // Nombre de frames par seconde
-            repeat: -1 // Répétition infinie
-        });//créer l'animation de marche vers la droite
+
+        this.worldStatic = new WorldStatic(scene)
     }
     create(){
         this.scene.add.existing(this) //on ajoute le player (this) à la scène et au jeu
         this.scene.physics.add.existing(this)
         this.setDepth(10) //Place le player au premier plan
         
-        this.setDisplaySize(this.scene.game.config.width/100,this.scene.game.config.height/100) //this.scene.game.config.width/x permet de definir la taille du sprite par rapport a la taille de la fentre et donc de conserver le responsive
+        this.setDisplaySize(this.worldStatic.bloc_size, this.worldStatic.bloc_size*2);
+        this.body.setSize(this.displayWidth, this.displayHeight); // Ajuste la hitbox à la taille de l'affichage
+        
+        this.body.updateFromGameObject(); //Cette fonction miracle fait correspondre la hitbox et le visuels, reglant tout les problemes de hitbox rencontrés
+
         this.setGravity(this.defaultGravityX,0) //definit la gravité du joueur (que du joueur!!). La gravité y sera activé a la fin de la création du premier chunk
         this.setCollideWorldBounds(true); // Empêche de sortir de l'écran 
 
@@ -57,18 +54,21 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
                 this.setFlipX(true) // Retourne le sprite vers la gauche
             }
         })
+        this.scene.input.keyboard.on("keydown-D", (event) => {
+            if (!this.isDashing && !this.pressed) {
+                this.setVelocityX(this.playerSpeed);
+                this.pressed = true;
+                this.direction = "right";
+                this.anims.play("walk_right", true); // Joue l'animation
+                if (this.flipX) this.setFlipX(false);
+            }
+        });
         
-        this.scene.input.keyboard.on("keydown-D",(event)=>{
-            if (this.isDashing || this.pressed){//empêche le player de se déplacer durant le dash et on ne fait rien si on se déplace déja
-                return
-            }
-            this.setVelocityX(this.playerSpeed) //on va vers la droite
-            this.pressed=true
-            this.direction = "right"
-            if(this.flipX){
-                this.setFlipX(false) // Retourne le sprite vers la droite
-            }
-        })
+        this.scene.input.keyboard.on("keyup-D", (event) => {
+            this.pressed = false;
+            this.anims.stop(); // Arrête l'animation
+        });
+        
         this.scene.input.keyboard.on("keydown-Z",()=>{//0n change de target de slot avec Z (vers le haut) ou S (vers le bas)
             this.inventoryData.target+=1
             if(this.inventoryData.target >= this.inventoryData.NUMBER_OF_SLOTS){
@@ -84,11 +84,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
         })
         this.scene.input.keyboard.on("keyup-Q", (event) => {
             this.pressed = false;
-        });
-
-        this.scene.input.keyboard.on("keyup-D", (event) => {
-            this.pressed = false;
-            "player marche droite".anims.stop();//on stop l'animation de marche vers la droite
         });
 
 

@@ -96,8 +96,6 @@ export default class Chunk{
 
         bloc.setDisplaySize(this.Statics.bloc_size,this.Statics.bloc_size) // définit la taile du bloc   
         bloc.body.setSize(this.Statics.bloc_size,this.Statics.bloc_size)
-        bloc.setOffset(0.5,0.5)
-        bloc.setOrigin(0.5,0.5)
         bloc.body.allowGravity = false; // Il ne doit pas tomber (annule la gravité)
         
         bloc.body.updateFromGameObject(); //Cette fonction miracle fait correspondre la hitbox et le visuels, reglant tout les problemes de hitbox rencontrés

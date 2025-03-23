@@ -13,9 +13,13 @@ export default class MainScene extends Phaser.Scene{
         this.targetText
     }
     preload(){  // Fonction où charger nos assets //à déplacer un jour dans une scene spécialisé
-        this.load.image("player","/static/assets/black_square.png") //charge notre image de player (un carré noir pour l'instant)
+        this.load.image("player","/static/assets/hydrus/static1.png") //charge notre image de player (un carré noir pour l'instant)
         this.load.image("stone","/static/assets/stone.png")
         this.load.image("dirt", "/static/assets/dirt.png")
+        this.load.spritesheet('walk_right','/static/assets/walk/right/walk.json', {
+            frameWidth: 32,
+            frameHeight: 48
+        });//charge le spirtesheet de la marche vers la droite
     }
     create(){
         this.cameras.main.setBackgroundColor(0xffffff) //set le backround en blanc (hex)
@@ -29,6 +33,13 @@ export default class MainScene extends Phaser.Scene{
         this.player = new Player(this,0,Static.to_phaser_y(50)) //On place le player a 360 blocs de haut (y=0 est le haut du monde, et on compte vers le bas)
         this.cameras.main.startFollow(this.player, true, 1, 1); //La caméra suit le joueur
         this.player.create(); // on appelle le create
+        this.player.anims.create({
+            key: 'walk_right',
+            frames: this.player.anims.generateFrameNumbers('walk_right', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        
         
         this.targetText = this.add.text(this.scale.width*0.95,this.scale.height*0.95,"" , {
             fontSize: '24px',
